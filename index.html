@@ -159,7 +159,6 @@
             labels: [
                 'Workflow\nOrchestration',
                 'Task\nLevel\nVisibility',
-                'Framework\nSupport',
                 'Kernel\nLevel\nObservability',
                 'Synthetic\nLogging',
                 'Cost\nPerformance\nOptimization',
@@ -170,7 +169,7 @@
             datasets: [
                 {
                     label: 'Seqera-ONLY',
-                    data: [4, 2, 1, 0, 0, 2, 1, 3, 2],
+                    data: [5, 3, 0, 1, 0, 1, 1, 1],
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.15)',
                     borderWidth: 2.5,
@@ -183,20 +182,19 @@
                     pointHoverBorderColor: '#3b82f6',
                     pointHoverBorderWidth: 3,
                     descriptions: [
-                        'Only Nextflow and Seqera Platform',
-                        'Basic metrics per task',
-                        'N/A, only Nextflow',
-                        'N/A',
-                        'N/A',
-                        'Manual via dashboard',
-                        'Limited detection capabilities',
-                        'Optimized for Nextflow workflows',
-                        'Task/runtime level'
+                        'Nextflow and Seqera Platform orchestration',
+                        'Task-level metrics and monitoring',
+                        'No kernel-level visibility',
+                        'Limited to log files',
+                        'No automated cost optimization',
+                        'Basic anomaly detection via log files',
+                        'Optimized for Nextflow workflows only',
+                        'Task and runtime level only'
                     ]
                 },
                 {
                     label: 'Seqera + Tracer',
-                    data: [5, 5, 5, 5, 5, 5, 5, 5, 5],
+                    data: [5, 3, 3, 3, 5, 3, 5, 4],
                     borderColor: '#27BF9F',
                     backgroundColor: 'rgba(39, 191, 159, 0.15)',
                     borderWidth: 2.5,
@@ -209,15 +207,14 @@
                     pointHoverBorderColor: '#27BF9F',
                     pointHoverBorderWidth: 3,
                     descriptions: [
-                        'Fully compatible',
-                        'Deep system-level telemetry',
-                        'Framework-agnostic',
-                        'Full process and resource tracing',
-                        'Available for any binary or script',
-                        'Automated with recommendations',
-                        'Detects idle time, silent errors, and inefficiencies',
-                        'Enhanced with observability and optimization',
-                        'End-to-end coverage: task, process, system, and cost levels'
+                        'Best-in-class workflow orchestration from Seqera',
+                        'Enhanced task-level visibility with Tracer',
+                        'Kernel-level process and resource tracing',
+                        'Synthetic logging for any binary or script',
+                        'Automated cost optimization with recommendations',
+                        'Centralized anomaly detection',
+                        'Framework-agnostic scientific workload support',
+                        'Deep observability: task, process, system, and cost levels'
                     ]
                 }
             ]
