@@ -317,6 +317,52 @@
         const ctx = document.getElementById('radarChart').getContext('2d');
         const chart = new Chart(ctx, config);
         Chart.register(transparentBackgroundPlugin);
+
+        // Interactive legend functionality
+        const legendItems = document.querySelectorAll('.legend-item');
+        
+        legendItems.forEach((item, index) => {
+            item.style.cursor = 'pointer';
+            
+            // Hover effect - dim the other dataset
+            item.addEventListener('mouseenter', () => {
+                chart.data.datasets.forEach((dataset, i) => {
+                    if (i !== index) {
+                        // Dim the other line
+                        dataset.borderColor = i === 0 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(39, 191, 159, 0.2)';
+                        dataset.backgroundColor = i === 0 ? 'rgba(59, 130, 246, 0.05)' : 'rgba(39, 191, 159, 0.05)';
+                        dataset.pointBackgroundColor = i === 0 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(39, 191, 159, 0.2)';
+                    } else {
+                        // Highlight the hovered line
+                        dataset.borderWidth = 3.5;
+                    }
+                });
+                chart.update('none');
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                // Reset all colors
+                chart.data.datasets[0].borderColor = '#3b82f6';
+                chart.data.datasets[0].backgroundColor = 'rgba(59, 130, 246, 0.15)';
+                chart.data.datasets[0].pointBackgroundColor = '#3b82f6';
+                chart.data.datasets[0].borderWidth = 2.5;
+                
+                chart.data.datasets[1].borderColor = '#27BF9F';
+                chart.data.datasets[1].backgroundColor = 'rgba(39, 191, 159, 0.15)';
+                chart.data.datasets[1].pointBackgroundColor = '#27BF9F';
+                chart.data.datasets[1].borderWidth = 2.5;
+                
+                chart.update('none');
+            });
+            
+            // Click to toggle visibility
+            item.addEventListener('click', () => {
+                const meta = chart.getDatasetMeta(index);
+                meta.hidden = !meta.hidden;
+                item.style.opacity = meta.hidden ? '0.3' : '1';
+                chart.update();
+            });
+        });
     </script>
 </body>
 </html>
