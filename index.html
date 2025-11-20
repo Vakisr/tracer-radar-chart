@@ -49,6 +49,7 @@
             margin-top: 24px;
             font-size: 14px;
             font-weight: 500;
+            color: #374151;
         }
         .legend-item {
             display: flex;
@@ -62,6 +63,17 @@
         .legend-item:hover {
             background: rgba(0, 0, 0, 0.04);
             transform: translateY(-1px);
+        }
+        @media (prefers-color-scheme: dark) {
+            .legend {
+                color: #ffffff;
+            }
+            .legend-item {
+                background: rgba(255, 255, 255, 0.05);
+            }
+            .legend-item:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
         }
         .legend-color {
             width: 24px;
@@ -80,9 +92,18 @@
             transition: opacity 0.2s;
             max-width: 300px;
             z-index: 1000;
+            color: #374151;
         }
         .tooltip.show {
             opacity: 1;
+        }
+        @media (prefers-color-scheme: dark) {
+            .tooltip {
+                background: #1f2937;
+                border-color: #374151;
+                color: #ffffff;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            }
         }
         .tooltip-title {
             font-weight: 600;
@@ -211,14 +232,14 @@
                             stepSize: 1
                         },
                         grid: {
-                            color: '#e5e7eb'
+                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#374151' : '#e5e7eb'
                         },
                         pointLabels: {
                             font: {
                                 size: 12,
                                 weight: '500'
                             },
-                            color: '#374151'
+                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ffffff' : '#374151'
                         }
                     }
                 },
