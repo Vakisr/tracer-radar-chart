@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background: transparent;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,9 +12,12 @@
             padding: 0;
             box-sizing: border-box;
         }
+        html {
+            background: transparent !important;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: transparent;
+            background: transparent !important;
             padding: 10px;
             margin: 0;
             overflow: hidden;
@@ -193,11 +196,8 @@
                         min: 0,
                         max: 5,
                         ticks: {
-                            stepSize: 1,
-                            font: {
-                                size: 11
-                            },
-                            color: '#6b7280'
+                            display: false,
+                            stepSize: 1
                         },
                         grid: {
                             color: '#e5e7eb'
