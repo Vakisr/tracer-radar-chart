@@ -31,6 +31,7 @@
             max-width: 100%;
             height: auto !important;
             filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+            background: transparent !important;
         }
         .legend {
             display: flex;
@@ -191,6 +192,7 @@
                 responsive: true,
                 maintainAspectRatio: true,
                 aspectRatio: 1.2,
+                backgroundColor: 'transparent',
                 scales: {
                     r: {
                         min: 0,
@@ -258,8 +260,22 @@
             }
         };
 
+        // Plugin to ensure transparent background
+        const transparentBackgroundPlugin = {
+            id: 'transparentBackground',
+            beforeDraw: (chart) => {
+                const ctx = chart.ctx;
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-over';
+                ctx.fillStyle = 'transparent';
+                ctx.fillRect(0, 0, chart.width, chart.height);
+                ctx.restore();
+            }
+        };
+
         const ctx = document.getElementById('radarChart').getContext('2d');
-        new Chart(ctx, config);
+        const chart = new Chart(ctx, config);
+        Chart.register(transparentBackgroundPlugin);
     </script>
 </body>
 </html>
