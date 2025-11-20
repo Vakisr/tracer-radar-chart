@@ -38,7 +38,7 @@
         }
         canvas {
             max-width: 100%;
-            min-height: 600px !important;
+            height: auto !important;
             filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
             background: transparent !important;
         }
@@ -228,7 +228,8 @@
             data: data,
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                aspectRatio: 1.2,
                 backgroundColor: 'transparent',
                 scales: {
                     r: {
@@ -248,11 +249,11 @@
                         },
                         pointLabels: {
                             font: {
-                                size: 13,
+                                size: 11,
                                 weight: '400'
                             },
                             color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ffffff' : '#374151',
-                            padding: 30
+                            padding: 25
                         }
                     }
                 },
