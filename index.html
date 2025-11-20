@@ -84,7 +84,7 @@
             position: absolute;
             background: white;
             border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            border-radius: 0.125rem;
             padding: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             pointer-events: none;
@@ -99,10 +99,10 @@
         }
         @media (prefers-color-scheme: dark) {
             .tooltip {
-                background: #1f2937;
-                border-color: #374151;
+                background: #0a0a0a;
+                border-color: #262626;
                 color: #ffffff;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
             }
         }
         .tooltip-title {
@@ -121,6 +121,14 @@
         }
         .seqera { color: #3b82f6; }
         .tracer { color: #8b5cf6; }
+        @media (prefers-color-scheme: dark) {
+            .tooltip-title {
+                color: #ffffff;
+            }
+            .tooltip-content {
+                color: #d1d5db;
+            }
+        }
         .hint {
             text-align: center;
             color: #6b7280;
