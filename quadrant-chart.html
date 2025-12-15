@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seqera vs Tracer - Positioning Matrix</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: "Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #e5e5e5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container { max-width: 1000px; width: 100%; }
+        
+        .matrix-wrapper {
+            position: relative;
+            padding: 50px 120px;
+        }
+        
+        .matrix-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .y-axis, .x-axis { position: absolute; background: #444; }
+        .y-axis { left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-50%); }
+        .x-axis { top: 50%; left: 0; right: 0; height: 2px; transform: translateY(-50%); }
+        
+        .y-axis::before, .y-axis::after, .x-axis::before, .x-axis::after {
+            content: '';
+            position: absolute;
+            border: 6px solid transparent;
+        }
+        .y-axis::before { top: -6px; left: 50%; transform: translateX(-50%); border-bottom-color: #444; }
+        .y-axis::after { bottom: -6px; left: 50%; transform: translateX(-50%); border-top-color: #444; }
+        .x-axis::before { left: -6px; top: 50%; transform: translateY(-50%); border-right-color: #444; }
+        .x-axis::after { right: -6px; top: 50%; transform: translateY(-50%); border-left-color: #444; }
+        
+        .axis-label {
+            position: absolute;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .axis-label.top { top: -40px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+        .axis-label.bottom { bottom: -40px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+        .axis-label.left { left: -60px; top: 50%; transform: translateY(-50%); }
+        .axis-label.right { right: -65px; top: 50%; transform: translateY(-50%); }
+        
+        .quadrant {
+            position: absolute;
+            width: 46%;
+            height: 46%;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        
+        .quadrant:hover { transform: scale(1.02); }
+        
+        .quadrant.top-left {
+            top: 2%; left: 2%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.04) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+        .quadrant.top-left:hover { box-shadow: 0 0 50px rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.5); }
+        
+        .quadrant.bottom-right {
+            bottom: 2%; right: 2%;
+            background: linear-gradient(135deg, rgba(39, 191, 159, 0.12) 0%, rgba(39, 191, 159, 0.04) 100%);
+            border: 1px solid rgba(39, 191, 159, 0.25);
+        }
+        .quadrant.bottom-right:hover { box-shadow: 0 0 50px rgba(39, 191, 159, 0.15); border-color: rgba(39, 191, 159, 0.5); }
+        
+        .quadrant.top-right, .quadrant.bottom-left {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+        }
+        .quadrant.top-right { top: 2%; right: 2%; }
+        .quadrant.bottom-left { bottom: 2%; left: 2%; }
+        
+        .quadrant-header { margin-bottom: 16px; }
+        
+        .quadrant-tag {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+        .top-left .quadrant-tag { color: #3b82f6; }
+        .bottom-right .quadrant-tag { color: #27BF9F; }
+        
+        .quadrant-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .top-left .quadrant-title { color: #60a5fa; }
+        .bottom-right .quadrant-title { color: #34d399; }
+        
+        .quadrant-context {
+            font-size: 0.95rem;
+            color: #aaa;
+            line-height: 1.5;
+            flex: 1;
+        }
+        
+        .quadrant-voice {
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: auto;
+            line-height: 1.4;
+            font-family: monospace;
+        }
+        .top-left .quadrant-voice {
+            background: rgba(59, 130, 246, 0.1);
+            color: #93c5fd;
+            border-left: 3px solid #3b82f6;
+        }
+        .bottom-right .quadrant-voice {
+            background: rgba(39, 191, 159, 0.1);
+            color: #6ee7b7;
+            border-left: 3px solid #27BF9F;
+        }
+        
+        .tap-hint { display: none; }
+        
+        /* Mobile styles */
+        @media (max-width: 700px) {
+            .matrix-wrapper { padding: 35px 50px; }
+            
+            .axis-label { font-size: 0.55rem; }
+            .axis-label.left { left: -40px; }
+            .axis-label.right { right: -45px; }
+            
+            .quadrant {
+                padding: 16px;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                cursor: pointer;
+            }
+            
+            .quadrant:active { transform: scale(0.98); }
+            
+            .quadrant-header { margin-bottom: 0; }
+            
+            .quadrant-tag { font-size: 0.65rem; margin-bottom: 4px; }
+            .quadrant-title { font-size: 1rem; margin-bottom: 0; }
+            
+            .quadrant-context,
+            .quadrant-voice { display: none; }
+            
+            .tap-hint {
+                display: block;
+                font-size: 0.55rem;
+                color: #666;
+                margin-top: 8px;
+            }
+        }
+        
+        /* Popup - only functional on mobile */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .popup-overlay.active { display: flex; }
+        
+        .popup {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            animation: popupIn 0.2s ease;
+        }
+        
+        @keyframes popupIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .popup.seqera { border: 1px solid rgba(59, 130, 246, 0.4); }
+        .popup.tracer { border: 1px solid rgba(39, 191, 159, 0.4); }
+        
+        .popup-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+        }
+        .popup-close:hover { color: #fff; }
+        
+        .popup-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+        .popup.seqera .popup-tag { color: #3b82f6; }
+        .popup.tracer .popup-tag { color: #27BF9F; }
+        
+        .popup-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .popup.seqera .popup-title { color: #60a5fa; }
+        .popup.tracer .popup-title { color: #34d399; }
+        
+        .popup-context {
+            font-size: 0.95rem;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .popup-data {
+            font-size: 0.85rem;
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            line-height: 1.6;
+        }
+        .popup.seqera .popup-data {
+            background: rgba(59, 130, 246, 0.1);
+            color: #93c5fd;
+            border-left: 3px solid #3b82f6;
+        }
+        .popup.tracer .popup-data {
+            background: rgba(39, 191, 159, 0.1);
+            color: #6ee7b7;
+            border-left: 3px solid #27BF9F;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="matrix-wrapper">
+            <div class="matrix-container">
+                <div class="y-axis"></div>
+                <div class="x-axis"></div>
+                
+                <div class="axis-label top">THE DEFINITION / YOUR CODE</div>
+                <div class="axis-label bottom">THE EXECUTION / KERNEL</div>
+                <div class="axis-label left">INTENT</div>
+                <div class="axis-label right">REALITY</div>
+                
+                <div class="quadrant top-left" onclick="showPopup('seqera')">
+                    <div class="quadrant-header">
+                        <div class="quadrant-tag">The Orchestrator</div>
+                        <div class="quadrant-title">Seqera / Nextflow</div>
+                    </div>
+                    <div class="quadrant-context">
+                        Defines the workflow and pushes jobs to the queue. It is the "Input."
+                    </div>
+                    <div class="quadrant-voice">{"type": "VCPU", "value": "64"},<br>{"type": "MEMORY", "value": "499712"}</div>
+                    <div class="tap-hint">Tap for details</div>
+                </div>
+                
+                <div class="quadrant top-right"></div>
+                <div class="quadrant bottom-left"></div>
+                
+                <div class="quadrant bottom-right" onclick="showPopup('tracer')">
+                    <div class="quadrant-header">
+                        <div class="quadrant-tag">Compute intelligence</div>
+                        <div class="quadrant-title">Tracer</div>
+                    </div>
+                    <div class="quadrant-context">
+                        Reads Kernel signals, maps them back to Pipeline ID, Jobs, tasks, users, and exposes the physical truth.
+                    </div>
+                    <div class="quadrant-voice">CPU utilization 8%<br>Memory utilization 18%<br>Disk utilization 114%</div>
+                    <div class="tap-hint">Tap for details</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup Overlay (mobile only) -->
+    <div class="popup-overlay" onclick="hidePopup(event)">
+        <div class="popup seqera" id="popup-seqera">
+            <button class="popup-close" onclick="hidePopup(event)">&times;</button>
+            <div class="popup-tag">The Orchestrator</div>
+            <div class="popup-title">Seqera / Nextflow</div>
+            <div class="popup-context">Defines the workflow and pushes jobs to the queue. It is the "Input."</div>
+            <div class="popup-data">{"type": "VCPU", "value": "64"},<br>{"type": "MEMORY", "value": "499712"}</div>
+        </div>
+        
+        <div class="popup tracer" id="popup-tracer" style="display: none;">
+            <button class="popup-close" onclick="hidePopup(event)">&times;</button>
+            <div class="popup-tag">Compute intelligence</div>
+            <div class="popup-title">Tracer</div>
+            <div class="popup-context">Reads Kernel signals, maps them back to Pipeline ID, Jobs, tasks, users, and exposes the physical truth.</div>
+            <div class="popup-data">CPU utilization 8%<br>Memory utilization 18%<br>Disk utilization 114%</div>
+        </div>
+    </div>
+    
+    <script>
+        function isMobile() {
+            return window.innerWidth <= 700;
+        }
+        
+        function showPopup(type) {
+            if (!isMobile()) return; // Only show popup on mobile
+            
+            const overlay = document.querySelector('.popup-overlay');
+            const seqeraPopup = document.getElementById('popup-seqera');
+            const tracerPopup = document.getElementById('popup-tracer');
+            
+            if (type === 'seqera') {
+                seqeraPopup.style.display = 'block';
+                tracerPopup.style.display = 'none';
+            } else {
+                seqeraPopup.style.display = 'none';
+                tracerPopup.style.display = 'block';
+            }
+            
+            overlay.classList.add('active');
+        }
+        
+        function hidePopup(event) {
+            if (event.target.classList.contains('popup-overlay') || event.target.classList.contains('popup-close')) {
+                document.querySelector('.popup-overlay').classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
