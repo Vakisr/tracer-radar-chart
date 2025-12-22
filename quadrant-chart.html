@@ -53,7 +53,7 @@
             padding: 4px 14px;
             border-radius: 12px;
             font-family: 'Chakra Petch', sans-serif;
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.15em;
@@ -74,24 +74,24 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
         
         .step-tag {
-            font-size: 0.65rem;
+            font-size: 1.05rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             opacity: 0.7;
         }
         
         .step-title {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 700;
         }
         
         .step-content {
             font-family: monospace;
-            font-size: 0.9rem;
+            font-size: 1rem;
             line-height: 1.6;
         }
         
@@ -104,12 +104,12 @@
         .arrow svg { width: 24px; height: 24px; }
         
         /* Intent - Purple */
-        .step-card.intent { border: 1px solid rgba(124, 58, 237, 0.35); }
-        .step-card.intent .step-badge { color: var(--purple); }
-        .step-card.intent .step-icon { background: var(--purple); color: var(--white); }
-        .step-card.intent .step-tag { color: var(--purple); }
-        .step-card.intent .step-title { color: var(--purple-light); }
-        .step-card.intent .step-content { color: #C4B5FD; }
+        .step-card.instrumentation { border: 1px solid rgba(124, 58, 237, 0.35); }
+        .step-card.instrumentation .step-badge { color: var(--purple); }
+        .step-card.instrumentation .step-icon { background: var(--purple); color: var(--white); }
+        .step-card.instrumentation .step-tag { color: var(--purple); }
+        .step-card.instrumentation .step-title { color: var(--purple-light); }
+        .step-card.instrumentation .step-content { color: #C4B5FD; }
         .arrow.purple svg { stroke: var(--purple); }
         
         /* Gap - Red */
@@ -127,7 +127,7 @@
             padding: 4px 14px;
             border-radius: 12px;
             font-family: 'Chakra Petch', sans-serif;
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.15em;
@@ -136,14 +136,14 @@
         }
         
         .gap-stat {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--red);
             margin-bottom: 6px;
         }
         
         .gap-text {
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             color: var(--red-light);
         }
         .arrow.red svg { stroke: var(--red); }
@@ -158,7 +158,7 @@
         .arrow.gray svg { stroke: var(--gray); }
         
         /* Reality - Teal */
-        .step-card.reality { border: 1px solid rgba(16, 185, 129, 0.35); }
+        .step-card.reality { border: 1px solid rgba(59, 130, 246, 0.5); }
         .step-card.reality .step-badge { color: var(--teal); }
         .step-card.reality .step-icon { background: var(--teal); color: var(--white); }
         .step-card.reality .step-tag { color: var(--teal); }
@@ -169,7 +169,7 @@
             background: rgba(16, 185, 129, 0.15);
             padding: 6px 12px;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 1.05rem;
             margin-bottom: 14px;
             color: var(--teal);
             font-family: monospace;
@@ -180,7 +180,7 @@
             align-items: center;
             gap: 12px;
             margin: 8px 0;
-            font-size: 0.85rem;
+            font-size: 1.05rem;
         }
         
         .util-label { color: #888; width: 70px; }
@@ -212,7 +212,7 @@
             border-left: 3px solid var(--red);
             padding: 10px 14px;
             border-radius: 6px;
-            font-size: 0.85rem;
+            font-size: 1.05rem;
             color: var(--red-light);
         }
         .diagnosis strong { color: var(--red); }
@@ -229,14 +229,14 @@
         
         .savings {
             margin-top: 14px;
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--green);
         }
         
         @media (max-width: 600px) {
             .step-card { padding: 20px; }
-            .step-title { font-size: 1.1rem; }
+            .step-title { font-size: 1.25rem; }
             .gap-stat { font-size: 1.5rem; }
         }
     </style>
@@ -245,10 +245,10 @@
     <div class="container">
         <div class="flow">
             
-            <!-- 1. Intent - Seqera -->
+            <!-- 1. Instrumentation - Seqera -->
             <div class="step">
-                <div class="step-card intent">
-                    <div class="step-badge">1. Intent</div>
+                <div class="step-card instrumentation">
+                    <div class="step-badge">1. Instrumentation</div>
                     <div class="step-header">
                         
                         <div class="step-titles">
@@ -298,6 +298,8 @@
                     </div>
                     <div class="step-content">
                         Instance: r5.16xlarge<br>
+                        vCPU: 64<br>
+                        Memory: 488 GB<br>
                         Job #4521 running...<br>
                         Task: STAR<br>
                         Duration: 47 min
