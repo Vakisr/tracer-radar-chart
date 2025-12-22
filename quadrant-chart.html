@@ -9,357 +9,352 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        /* Brand colors */
+        :root {
+            --purple-dark: #3730A3;
+            --purple: #7C3AED;
+            --blue-dark: #2563EB;
+            --blue: #3B82F6;
+            --cyan: #22D3EE;
+            --teal: #10B981;
+            --teal-light: #34D399;
+            --mint: #6EE7B7;
+            --pink: #EC4899;
+            --pink-light: #F472B6;
+            --white: #FFFFFF;
+            --gray-light: #E5E5E5;
+            --gray-dark: #374151;
+            --black: #0A0A0A;
+        }
+        
         body {
             font-family: "Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-            background: #0a0a0a;
-            color: #e5e5e5;
+            background: var(--black);
+            color: var(--gray-light);
             min-height: 100vh;
             padding: 40px 20px;
         }
         
-        .container { max-width: 1000px; margin: 0 auto; }
-        
-        /* Actor headers */
-        .actors {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 40px;
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto;
         }
         
-        .actor { text-align: center; }
-        
-        .actor-box {
-            display: inline-block;
-            padding: 12px 28px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .actor.seqera .actor-box {
-            background: rgba(59, 130, 246, 0.15);
-            border: 1px solid rgba(59, 130, 246, 0.5);
-            color: #60a5fa;
-        }
-        
-        .actor.kernel .actor-box {
-            background: rgba(156, 163, 175, 0.15);
-            border: 1px solid rgba(156, 163, 175, 0.4);
-            color: #9ca3af;
-        }
-        
-        .actor.tracer .actor-box {
-            background: rgba(39, 191, 159, 0.15);
-            border: 1px solid rgba(39, 191, 159, 0.5);
-            color: #34d399;
-        }
-        
-        .actor-subtitle {
-            font-size: 0.65rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-top: 8px;
-        }
-        
-        /* Flow rows */
-        .flow-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-            align-items: start;
-        }
-        
-        .flow-cell {
-            position: relative;
-        }
-        
-        /* Arrow pointing right */
-        .arrow-right {
-            position: absolute;
-            right: -30px;
-            top: 50%;
-            transform: translateY(-50%);
+        /* Vertical flow */
+        .flow {
             display: flex;
-            align-items: center;
-            z-index: 10;
-        }
-        
-        .arrow-right svg {
-            width: 40px;
-            height: 20px;
-        }
-        
-        .arrow-right.red svg { stroke: #ef4444; }
-        .arrow-right.gray svg { stroke: #6b7280; }
-        .arrow-right.teal svg { stroke: #27BF9F; }
-        
-        /* Arrow pointing down-right (diagonal) */
-        .arrow-down-right {
-            position: absolute;
-            right: -20px;
-            bottom: -30px;
-            z-index: 10;
-        }
-        
-        .arrow-down-right svg {
-            width: 50px;
-            height: 40px;
+            flex-direction: column;
+            gap: 0;
         }
         
         /* Step cards */
+        .step {
+            width: 100%;
+        }
+        
         .step-card {
-            background: #111;
-            border-radius: 10px;
-            padding: 16px 20px;
+            border-radius: 12px;
+            padding: 24px 28px;
             position: relative;
         }
         
         .step-badge {
             position: absolute;
-            top: -10px;
-            left: 16px;
-            background: #0a0a0a;
-            padding: 3px 12px;
-            border-radius: 10px;
+            top: -12px;
+            left: 24px;
+            background: var(--black);
+            padding: 4px 14px;
+            border-radius: 12px;
             font-family: 'Chakra Petch', sans-serif;
-            font-size: 0.55rem;
+            font-size: 0.6rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.15em;
         }
         
-        .step-label {
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .step-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .step-titles {
+            flex: 1;
+        }
+        
+        .step-tag {
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 10px;
-            margin-top: 4px;
+            opacity: 0.7;
+        }
+        
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
         }
         
         .step-content {
             font-family: monospace;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             line-height: 1.6;
         }
         
-        /* Intent card */
+        /* Arrows */
+        .arrow {
+            display: flex;
+            justify-content: center;
+            padding: 12px 0;
+        }
+        
+        .arrow svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Intent - Seqera (Purple) */
         .step-card.intent {
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.12) 0%, rgba(124, 58, 237, 0.04) 100%);
+            border: 1px solid rgba(124, 58, 237, 0.35);
         }
-        .step-card.intent .step-badge { color: #3b82f6; }
-        .step-card.intent .step-label { color: #3b82f6; }
-        .step-card.intent .step-content { color: #93c5fd; }
+        .step-card.intent .step-badge { color: var(--purple); }
+        .step-card.intent .step-icon { background: var(--purple); color: var(--white); }
+        .step-card.intent .step-tag { color: var(--purple); }
+        .step-card.intent .step-title { color: #A78BFA; }
+        .step-card.intent .step-content { color: #C4B5FD; }
+        .arrow.purple svg { stroke: var(--purple); }
         
-        /* Execution card */
+        /* Gap - Pink */
+        .gap-card {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(236, 72, 153, 0.04) 100%);
+            border: 1px solid rgba(236, 72, 153, 0.4);
+            border-radius: 12px;
+            padding: 20px 28px;
+            text-align: center;
+        }
+        
+        .gap-badge {
+            display: inline-block;
+            background: var(--black);
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--pink);
+            margin-bottom: 10px;
+        }
+        
+        .gap-stat {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--pink);
+            margin-bottom: 6px;
+        }
+        
+        .gap-text {
+            font-size: 0.95rem;
+            color: var(--pink-light);
+        }
+        .arrow.pink svg { stroke: var(--pink); }
+        
+        /* Execution - Kernel (Blue) */
         .step-card.execution {
-            border: 1px solid rgba(156, 163, 175, 0.3);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(37, 99, 235, 0.04) 100%);
+            border: 1px solid rgba(37, 99, 235, 0.35);
         }
-        .step-card.execution .step-badge { color: #9ca3af; }
-        .step-card.execution .step-label { color: #9ca3af; }
-        .step-card.execution .step-content { color: #d1d5db; }
+        .step-card.execution .step-badge { color: var(--blue); }
+        .step-card.execution .step-icon { background: var(--blue-dark); color: var(--white); }
+        .step-card.execution .step-tag { color: var(--blue); }
+        .step-card.execution .step-title { color: #60A5FA; }
+        .step-card.execution .step-content { color: #93C5FD; }
+        .arrow.blue svg { stroke: var(--blue); }
         
-        /* Reality card */
+        /* Reality - Tracer (Teal) */
         .step-card.reality {
-            border: 1px solid rgba(39, 191, 159, 0.3);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.04) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.35);
         }
-        .step-card.reality .step-badge { color: #27BF9F; }
-        .step-card.reality .step-label { color: #27BF9F; }
+        .step-card.reality .step-badge { color: var(--teal); }
+        .step-card.reality .step-icon { background: var(--teal); color: var(--white); }
+        .step-card.reality .step-tag { color: var(--teal); }
+        .step-card.reality .step-title { color: var(--teal-light); }
         
         .pipeline-tag {
             display: inline-block;
-            background: rgba(39, 191, 159, 0.15);
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            margin-bottom: 12px;
-            color: #27BF9F;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin-bottom: 14px;
+            color: var(--teal);
             font-family: monospace;
         }
         
         .util-row {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin: 6px 0;
-            font-size: 0.8rem;
+            gap: 12px;
+            margin: 8px 0;
+            font-size: 0.85rem;
         }
         
-        .util-label { color: #888; width: 60px; }
+        .util-label { color: #888; width: 70px; }
         
         .util-bar {
             flex: 1;
-            height: 6px;
+            height: 8px;
             background: rgba(255,255,255,0.1);
-            border-radius: 3px;
+            border-radius: 4px;
             overflow: hidden;
         }
         
-        .util-fill { height: 100%; border-radius: 3px; }
-        .util-fill.low { background: #22c55e; }
-        .util-fill.high { background: #ef4444; }
+        .util-fill { height: 100%; border-radius: 4px; }
+        .util-fill.low { background: var(--teal); }
+        .util-fill.high { background: var(--pink); }
         
         .util-value {
-            width: 40px;
+            width: 50px;
             text-align: right;
             font-family: monospace;
             font-weight: 600;
         }
-        .util-value.low { color: #22c55e; }
-        .util-value.high { color: #ef4444; }
+        .util-value.low { color: var(--teal-light); }
+        .util-value.high { color: var(--pink); }
         
         .diagnosis {
-            margin-top: 12px;
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 3px solid #ef4444;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            color: #fca5a5;
+            margin-top: 14px;
+            background: rgba(236, 72, 153, 0.1);
+            border-left: 3px solid var(--pink);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--pink-light);
         }
-        .diagnosis strong { color: #ef4444; }
+        .diagnosis strong { color: var(--pink); }
         
-        /* Gap callout */
-        .gap-section {
-            margin: 30px 0;
-        }
+        .arrow.teal svg { stroke: var(--teal); }
         
-        .gap-card {
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            border-radius: 12px;
-            padding: 16px 24px;
-            text-align: center;
-        }
-        
-        .gap-label {
-            font-family: 'Chakra Petch', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: #ef4444;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 6px;
-        }
-        
-        .gap-text {
-            font-size: 1rem;
-            color: #fca5a5;
-        }
-        
-        /* Fix card */
-        .fix-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
+        /* Fix - Cyan/Mint */
         .step-card.fix {
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, transparent 100%);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(34, 211, 238, 0.04) 100%);
+            border: 1px solid rgba(34, 211, 238, 0.4);
         }
-        .step-card.fix .step-badge { color: #22c55e; }
-        .step-card.fix .step-label { color: #22c55e; }
-        .step-card.fix .step-content { color: #86efac; }
+        .step-card.fix .step-badge { color: var(--cyan); }
+        .step-card.fix .step-icon { background: var(--cyan); color: var(--black); }
+        .step-card.fix .step-tag { color: var(--cyan); }
+        .step-card.fix .step-title { color: var(--cyan); }
+        .step-card.fix .step-content { color: #A5F3FC; }
         
         .savings {
-            margin-top: 12px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #22c55e;
+            margin-top: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--mint);
         }
         
         /* Mobile */
-        @media (max-width: 768px) {
-            .actors, .flow-row, .fix-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .actor.kernel { display: none; }
-            
-            .arrow-right, .arrow-down-right {
-                display: none;
-            }
-            
-            .flow-cell { margin-bottom: 16px; }
+        @media (max-width: 600px) {
+            .step-card { padding: 20px; }
+            .step-title { font-size: 1.1rem; }
+            .gap-stat { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Actor headers -->
-        <div class="actors">
-            <div class="actor seqera">
-                <div class="actor-box">Seqera / Nextflow</div>
-                <div class="actor-subtitle">The Orchestrator</div>
-            </div>
-            <div class="actor kernel">
-                <div class="actor-box">Kernel / Hardware</div>
-                <div class="actor-subtitle">The Execution Layer</div>
-            </div>
-            <div class="actor tracer">
-                <div class="actor-box">Tracer</div>
-                <div class="actor-subtitle">Pipeline Intelligence</div>
-            </div>
-        </div>
-        
-        <!-- Row 1: Intent -->
-        <div class="flow-row">
-            <div class="flow-cell">
+        <div class="flow">
+            
+            <!-- 1. Intent - Seqera -->
+            <div class="step">
                 <div class="step-card intent">
                     <div class="step-badge">1. Intent</div>
-                    <div class="step-label">Resource Request</div>
+                    <div class="step-header">
+                        <div class="step-icon">S</div>
+                        <div class="step-titles">
+                            <div class="step-tag">The Orchestrator</div>
+                            <div class="step-title">Seqera / Nextflow</div>
+                        </div>
+                    </div>
                     <div class="step-content">
                         Pipeline: rnaseq_analysis<br>
                         vCPU: 64<br>
                         Memory: 488 GB
                     </div>
                 </div>
-                <div class="arrow-right red">
-                    <svg viewBox="0 0 40 20" fill="none">
-                        <line x1="0" y1="10" x2="30" y2="10" stroke-width="2"/>
-                        <polyline points="26,5 33,10 26,15" stroke-width="2" fill="none"/>
-                    </svg>
+            </div>
+            
+            <div class="arrow purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+            </div>
+            
+            <!-- The Gap -->
+            <div class="step">
+                <div class="gap-card">
+                    <div class="gap-badge">The Gap — Wasted Spend</div>
+                    <div class="gap-stat">92% CPU Idle</div>
+                    <div class="gap-text">You're paying for compute you don't use.</div>
                 </div>
             </div>
-            <div class="flow-cell"></div>
-            <div class="flow-cell"></div>
-        </div>
-        
-        <!-- Row 2: Execution -->
-        <div class="flow-row">
-            <div class="flow-cell"></div>
-            <div class="flow-cell">
+            
+            <div class="arrow pink">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+            </div>
+            
+            <!-- 2. Execution - Kernel -->
+            <div class="step">
                 <div class="step-card execution">
                     <div class="step-badge">2. Execution</div>
-                    <div class="step-label">Actual Compute</div>
+                    <div class="step-header">
+                        <div class="step-icon">K</div>
+                        <div class="step-titles">
+                            <div class="step-tag">The Execution Layer</div>
+                            <div class="step-title">Kernel / Hardware</div>
+                        </div>
+                    </div>
                     <div class="step-content">
                         Job #4521 running...<br>
                         Task: FASTQC<br>
                         Duration: 47 min
                     </div>
                 </div>
-                <div class="arrow-right teal">
-                    <svg viewBox="0 0 40 20" fill="none">
-                        <line x1="0" y1="10" x2="30" y2="10" stroke-width="2"/>
-                        <polyline points="26,5 33,10 26,15" stroke-width="2" fill="none"/>
-                    </svg>
-                </div>
             </div>
-            <div class="flow-cell"></div>
-        </div>
-        
-        <!-- Row 3: Reality -->
-        <div class="flow-row">
-            <div class="flow-cell"></div>
-            <div class="flow-cell"></div>
-            <div class="flow-cell">
+            
+            <div class="arrow blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+            </div>
+            
+            <!-- 3. Reality - Tracer -->
+            <div class="step">
                 <div class="step-card reality">
                     <div class="step-badge">3. Reality</div>
-                    <div class="step-label">eBPF Kernel Telemetry</div>
+                    <div class="step-header">
+                        <div class="step-icon">T</div>
+                        <div class="step-titles">
+                            <div class="step-tag">Pipeline Intelligence</div>
+                            <div class="step-title">Tracer</div>
+                        </div>
+                    </div>
                     <div class="pipeline-tag">
                         Mapped to: rnaseq_analysis → FASTQC → Job #4521
                     </div>
@@ -383,24 +378,24 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Gap callout -->
-        <div class="gap-section">
-            <div class="gap-card">
-                <div class="gap-label">The Gap — Wasted Spend</div>
-                <div class="gap-text">92% of requested CPU is idle. You're paying for compute you don't use.</div>
+            
+            <div class="arrow teal">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
             </div>
-        </div>
-        
-        <!-- Row 4: The Fix -->
-        <div class="fix-row">
-            <div class="flow-cell"></div>
-            <div class="flow-cell"></div>
-            <div class="flow-cell">
+            
+            <!-- 4. The Fix -->
+            <div class="step">
                 <div class="step-card fix">
                     <div class="step-badge">4. The Fix</div>
-                    <div class="step-label">Tracer Recommendation</div>
+                    <div class="step-header">
+                        <div class="step-icon">✓</div>
+                        <div class="step-titles">
+                            <div class="step-tag">Tracer Recommendation</div>
+                            <div class="step-title">Right-sized Configuration</div>
+                        </div>
+                    </div>
                     <div class="step-content">
                         vCPU: 8<br>
                         Memory: 64 GB<br>
@@ -409,6 +404,7 @@
                     <div class="savings">→ Save 78% on compute costs</div>
                 </div>
             </div>
+            
         </div>
     </div>
 </body>
