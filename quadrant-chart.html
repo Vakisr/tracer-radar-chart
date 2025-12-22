@@ -14,198 +14,180 @@
             background: #0a0a0a;
             color: #e5e5e5;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
             padding: 40px 20px;
         }
         
-        .container { max-width: 600px; width: 100%; }
+        .container { max-width: 1000px; margin: 0 auto; }
         
-        /* Vertical flow */
-        .flow {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Actor headers */
+        .actors {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .actor { text-align: center; }
+        
+        .actor-box {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .actor.seqera .actor-box {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            color: #60a5fa;
+        }
+        
+        .actor.kernel .actor-box {
+            background: rgba(156, 163, 175, 0.15);
+            border: 1px solid rgba(156, 163, 175, 0.4);
+            color: #9ca3af;
+        }
+        
+        .actor.tracer .actor-box {
+            background: rgba(39, 191, 159, 0.15);
+            border: 1px solid rgba(39, 191, 159, 0.5);
+            color: #34d399;
+        }
+        
+        .actor-subtitle {
+            font-size: 0.65rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 8px;
+        }
+        
+        /* Flow rows */
+        .flow-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: start;
+        }
+        
+        .flow-cell {
             position: relative;
         }
         
-        /* Vertical connector line */
-        .flow::before {
-            content: '';
+        /* Arrow pointing right */
+        .arrow-right {
             position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 2px;
-            background: linear-gradient(to bottom, 
-                #3b82f6 0%, 
-                #3b82f6 20%,
-                #ef4444 35%,
-                #ef4444 50%,
-                #27BF9F 65%,
-                #22c55e 100%
-            );
-            z-index: 0;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .arrow-right svg {
+            width: 40px;
+            height: 20px;
+        }
+        
+        .arrow-right.red svg { stroke: #ef4444; }
+        .arrow-right.gray svg { stroke: #6b7280; }
+        .arrow-right.teal svg { stroke: #27BF9F; }
+        
+        /* Arrow pointing down-right (diagonal) */
+        .arrow-down-right {
+            position: absolute;
+            right: -20px;
+            bottom: -30px;
+            z-index: 10;
+        }
+        
+        .arrow-down-right svg {
+            width: 50px;
+            height: 40px;
         }
         
         /* Step cards */
-        .step {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 480px;
-        }
-        
         .step-card {
             background: #111;
-            border-radius: 12px;
-            padding: 20px 24px;
+            border-radius: 10px;
+            padding: 16px 20px;
             position: relative;
         }
         
         .step-badge {
             position: absolute;
-            top: -12px;
-            left: 24px;
+            top: -10px;
+            left: 16px;
             background: #0a0a0a;
-            padding: 4px 14px;
-            border-radius: 12px;
+            padding: 3px 12px;
+            border-radius: 10px;
             font-family: 'Chakra Petch', sans-serif;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
-        
-        .step-tag {
-            font-size: 0.7rem;
-            text-transform: uppercase;
             letter-spacing: 0.12em;
-            opacity: 0.7;
-            margin-bottom: 4px;
         }
         
-        .step-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        
-        .step-context {
-            font-size: 0.85rem;
-            color: #999;
-            line-height: 1.5;
-            margin-bottom: 14px;
-        }
-        
-        /* Step 1: Intent */
-        .step.intent .step-card {
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-        .step.intent .step-badge { color: #3b82f6; }
-        .step.intent .step-tag { color: #3b82f6; }
-        .step.intent .step-title { color: #60a5fa; }
-        
-        .resource-box {
-            font-family: monospace;
-            font-size: 0.85rem;
-            background: rgba(59, 130, 246, 0.08);
-            border-left: 3px solid #3b82f6;
-            padding: 12px 14px;
-            border-radius: 6px;
-            color: #93c5fd;
-        }
-        .resource-box .label {
-            color: #6b7280;
+        .step-label {
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 6px;
-            display: block;
+            margin-bottom: 10px;
+            margin-top: 4px;
         }
         
-        /* Connector arrow */
-        .connector {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 16px 0;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .connector-arrow {
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-        }
-        
-        .connector-arrow.blue { border-top: 12px solid #3b82f6; }
-        .connector-arrow.red { border-top: 12px solid #ef4444; }
-        .connector-arrow.teal { border-top: 12px solid #27BF9F; }
-        .connector-arrow.green { border-top: 12px solid #22c55e; }
-        
-        /* Step 2: The Gap */
-        .step.gap .step-card {
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            background: rgba(239, 68, 68, 0.05);
-            text-align: center;
-        }
-        .step.gap .step-badge { color: #ef4444; }
-        .step.gap .step-title { 
-            color: #fca5a5; 
-            font-size: 1.1rem;
-        }
-        
-        .gap-stat {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ef4444;
-            margin: 10px 0;
-        }
-        
-        .gap-detail {
+        .step-content {
+            font-family: monospace;
             font-size: 0.85rem;
-            color: #fca5a5;
+            line-height: 1.6;
         }
         
-        /* Step 3: Reality */
-        .step.reality .step-card {
+        /* Intent card */
+        .step-card.intent {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .step-card.intent .step-badge { color: #3b82f6; }
+        .step-card.intent .step-label { color: #3b82f6; }
+        .step-card.intent .step-content { color: #93c5fd; }
+        
+        /* Execution card */
+        .step-card.execution {
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+        .step-card.execution .step-badge { color: #9ca3af; }
+        .step-card.execution .step-label { color: #9ca3af; }
+        .step-card.execution .step-content { color: #d1d5db; }
+        
+        /* Reality card */
+        .step-card.reality {
             border: 1px solid rgba(39, 191, 159, 0.3);
         }
-        .step.reality .step-badge { color: #27BF9F; }
-        .step.reality .step-tag { color: #27BF9F; }
-        .step.reality .step-title { color: #34d399; }
+        .step-card.reality .step-badge { color: #27BF9F; }
+        .step-card.reality .step-label { color: #27BF9F; }
         
-        .pipeline-mapping {
-            font-size: 0.75rem;
-            color: #27BF9F;
-            background: rgba(39, 191, 159, 0.1);
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-bottom: 14px;
+        .pipeline-tag {
             display: inline-block;
-        }
-        .pipeline-mapping span { color: #6ee7b7; font-weight: 600; }
-        
-        .utilization-grid {
-            display: grid;
-            gap: 8px;
-            margin-bottom: 14px;
+            background: rgba(39, 191, 159, 0.15);
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-bottom: 12px;
+            color: #27BF9F;
+            font-family: monospace;
         }
         
         .util-row {
             display: flex;
             align-items: center;
             gap: 10px;
+            margin: 6px 0;
             font-size: 0.8rem;
         }
         
-        .util-label {
-            color: #888;
-            width: 70px;
-        }
+        .util-label { color: #888; width: 60px; }
         
         .util-bar {
             flex: 1;
@@ -215,10 +197,7 @@
             overflow: hidden;
         }
         
-        .util-fill {
-            height: 100%;
-            border-radius: 3px;
-        }
+        .util-fill { height: 100%; border-radius: 3px; }
         .util-fill.low { background: #22c55e; }
         .util-fill.high { background: #ef4444; }
         
@@ -232,137 +211,204 @@
         .util-value.high { color: #ef4444; }
         
         .diagnosis {
+            margin-top: 12px;
             background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 0.8rem;
+            border-left: 3px solid #ef4444;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
             color: #fca5a5;
         }
         .diagnosis strong { color: #ef4444; }
         
-        /* Step 4: The Fix */
-        .step.fix .step-card {
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.02) 100%);
+        /* Gap callout */
+        .gap-section {
+            margin: 30px 0;
         }
-        .step.fix .step-badge { color: #22c55e; }
-        .step.fix .step-tag { color: #22c55e; }
-        .step.fix .step-title { color: #4ade80; }
         
-        .fix-config {
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: #86efac;
-            margin-bottom: 12px;
+        .gap-card {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
         }
+        
+        .gap-label {
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 6px;
+        }
+        
+        .gap-text {
+            font-size: 1rem;
+            color: #fca5a5;
+        }
+        
+        /* Fix card */
+        .fix-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .step-card.fix {
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, transparent 100%);
+        }
+        .step-card.fix .step-badge { color: #22c55e; }
+        .step-card.fix .step-label { color: #22c55e; }
+        .step-card.fix .step-content { color: #86efac; }
         
         .savings {
-            font-size: 1.1rem;
-            font-weight: 700;
+            margin-top: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
             color: #22c55e;
         }
         
-        /* Mobile adjustments */
-        @media (max-width: 500px) {
-            .container { padding: 10px; }
+        /* Mobile */
+        @media (max-width: 768px) {
+            .actors, .flow-row, .fix-row {
+                grid-template-columns: 1fr;
+            }
             
-            .step-card { padding: 16px 18px; }
-            .step-title { font-size: 1.1rem; }
-            .gap-stat { font-size: 1.6rem; }
+            .actor.kernel { display: none; }
+            
+            .arrow-right, .arrow-down-right {
+                display: none;
+            }
+            
+            .flow-cell { margin-bottom: 16px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="flow">
-            
-            <!-- Step 1: Intent -->
-            <div class="step intent">
-                <div class="step-card">
+        <!-- Actor headers -->
+        <div class="actors">
+            <div class="actor seqera">
+                <div class="actor-box">Seqera / Nextflow</div>
+                <div class="actor-subtitle">The Orchestrator</div>
+            </div>
+            <div class="actor kernel">
+                <div class="actor-box">Kernel / Hardware</div>
+                <div class="actor-subtitle">The Execution Layer</div>
+            </div>
+            <div class="actor tracer">
+                <div class="actor-box">Tracer</div>
+                <div class="actor-subtitle">Pipeline Intelligence</div>
+            </div>
+        </div>
+        
+        <!-- Row 1: Intent -->
+        <div class="flow-row">
+            <div class="flow-cell">
+                <div class="step-card intent">
                     <div class="step-badge">1. Intent</div>
-                    <div class="step-tag">The Orchestrator</div>
-                    <div class="step-title">Seqera / Nextflow</div>
-                    <div class="step-context">
-                        Defines workflows and dispatches jobs. This is what you <em>requested</em>.
-                    </div>
-                    <div class="resource-box">
-                        <span class="label">Pipeline: rnaseq_analysis</span>
-                        vCPU: 64 &nbsp;|&nbsp; Memory: 488 GB
+                    <div class="step-label">Resource Request</div>
+                    <div class="step-content">
+                        Pipeline: rnaseq_analysis<br>
+                        vCPU: 64<br>
+                        Memory: 488 GB
                     </div>
                 </div>
-            </div>
-            
-            <div class="connector">
-                <div class="connector-arrow blue"></div>
-            </div>
-            
-            <!-- Step 2: The Gap -->
-            <div class="step gap">
-                <div class="step-card">
-                    <div class="step-badge">The Gap</div>
-                    <div class="step-title">Wasted Spend</div>
-                    <div class="gap-stat">92% CPU Idle</div>
-                    <div class="gap-detail">You're paying for compute you don't use.</div>
+                <div class="arrow-right red">
+                    <svg viewBox="0 0 40 20" fill="none">
+                        <line x1="0" y1="10" x2="30" y2="10" stroke-width="2"/>
+                        <polyline points="26,5 33,10 26,15" stroke-width="2" fill="none"/>
+                    </svg>
                 </div>
             </div>
-            
-            <div class="connector">
-                <div class="connector-arrow red"></div>
+            <div class="flow-cell"></div>
+            <div class="flow-cell"></div>
+        </div>
+        
+        <!-- Row 2: Execution -->
+        <div class="flow-row">
+            <div class="flow-cell"></div>
+            <div class="flow-cell">
+                <div class="step-card execution">
+                    <div class="step-badge">2. Execution</div>
+                    <div class="step-label">Actual Compute</div>
+                    <div class="step-content">
+                        Job #4521 running...<br>
+                        Task: FASTQC<br>
+                        Duration: 47 min
+                    </div>
+                </div>
+                <div class="arrow-right teal">
+                    <svg viewBox="0 0 40 20" fill="none">
+                        <line x1="0" y1="10" x2="30" y2="10" stroke-width="2"/>
+                        <polyline points="26,5 33,10 26,15" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
             </div>
-            
-            <!-- Step 3: Reality -->
-            <div class="step reality">
-                <div class="step-card">
-                    <div class="step-badge">2. Reality</div>
-                    <div class="step-tag">Pipeline Intelligence</div>
-                    <div class="step-title">Tracer</div>
-                    <div class="pipeline-mapping">
-                        Task: <span>FASTQC</span> → Job: <span>#4521</span> → Pipeline: <span>rnaseq_analysis</span>
+            <div class="flow-cell"></div>
+        </div>
+        
+        <!-- Row 3: Reality -->
+        <div class="flow-row">
+            <div class="flow-cell"></div>
+            <div class="flow-cell"></div>
+            <div class="flow-cell">
+                <div class="step-card reality">
+                    <div class="step-badge">3. Reality</div>
+                    <div class="step-label">eBPF Kernel Telemetry</div>
+                    <div class="pipeline-tag">
+                        Mapped to: rnaseq_analysis → FASTQC → Job #4521
                     </div>
-                    <div class="step-context">
-                        Maps kernel signals back to your specific pipeline tasks. We know where <em>your pipeline</em> bottlenecks are.
+                    <div class="util-row">
+                        <span class="util-label">CPU</span>
+                        <div class="util-bar"><div class="util-fill low" style="width: 8%"></div></div>
+                        <span class="util-value low">8%</span>
                     </div>
-                    <div class="utilization-grid">
-                        <div class="util-row">
-                            <span class="util-label">CPU</span>
-                            <div class="util-bar"><div class="util-fill low" style="width: 8%"></div></div>
-                            <span class="util-value low">8%</span>
-                        </div>
-                        <div class="util-row">
-                            <span class="util-label">Memory</span>
-                            <div class="util-bar"><div class="util-fill low" style="width: 18%"></div></div>
-                            <span class="util-value low">18%</span>
-                        </div>
-                        <div class="util-row">
-                            <span class="util-label">Disk I/O</span>
-                            <div class="util-bar"><div class="util-fill high" style="width: 100%"></div></div>
-                            <span class="util-value high">114%</span>
-                        </div>
+                    <div class="util-row">
+                        <span class="util-label">Memory</span>
+                        <div class="util-bar"><div class="util-fill low" style="width: 18%"></div></div>
+                        <span class="util-value low">18%</span>
+                    </div>
+                    <div class="util-row">
+                        <span class="util-label">Disk I/O</span>
+                        <div class="util-bar"><div class="util-fill high" style="width: 100%"></div></div>
+                        <span class="util-value high">114%</span>
                     </div>
                     <div class="diagnosis">
-                        <strong>Diagnosis:</strong> You're I/O bound. Adding RAM or CPU won't help.
+                        <strong>Diagnosis:</strong> I/O bound. Adding CPU/RAM won't help.
                     </div>
                 </div>
             </div>
-            
-            <div class="connector">
-                <div class="connector-arrow teal"></div>
+        </div>
+        
+        <!-- Gap callout -->
+        <div class="gap-section">
+            <div class="gap-card">
+                <div class="gap-label">The Gap — Wasted Spend</div>
+                <div class="gap-text">92% of requested CPU is idle. You're paying for compute you don't use.</div>
             </div>
-            
-            <!-- Step 4: The Fix -->
-            <div class="step fix">
-                <div class="step-card">
-                    <div class="step-badge">3. The Fix</div>
-                    <div class="step-tag">Tracer Recommendation</div>
-                    <div class="step-title">Right-sized Configuration</div>
-                    <div class="fix-config">
-                        vCPU: 8 &nbsp;|&nbsp; Memory: 64 GB &nbsp;|&nbsp; Storage: NVMe SSD
+        </div>
+        
+        <!-- Row 4: The Fix -->
+        <div class="fix-row">
+            <div class="flow-cell"></div>
+            <div class="flow-cell"></div>
+            <div class="flow-cell">
+                <div class="step-card fix">
+                    <div class="step-badge">4. The Fix</div>
+                    <div class="step-label">Tracer Recommendation</div>
+                    <div class="step-content">
+                        vCPU: 8<br>
+                        Memory: 64 GB<br>
+                        Storage: NVMe SSD
                     </div>
                     <div class="savings">→ Save 78% on compute costs</div>
                 </div>
             </div>
-            
         </div>
     </div>
 </body>
