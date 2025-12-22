@@ -9,53 +9,40 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Brand colors */
         :root {
-            --purple-dark: #3730A3;
             --purple: #7C3AED;
-            --blue-dark: #2563EB;
-            --blue: #3B82F6;
-            --cyan: #22D3EE;
+            --purple-light: #A78BFA;
             --teal: #10B981;
             --teal-light: #34D399;
-            --mint: #6EE7B7;
-            --pink: #EC4899;
-            --pink-light: #F472B6;
+            --green: #22C55E;
+            --green-light: #86EFAC;
+            --red: #EF4444;
+            --red-light: #FCA5A5;
+            --gray: #6B7280;
+            --gray-light: #9CA3AF;
             --white: #FFFFFF;
-            --gray-light: #E5E5E5;
-            --gray-dark: #374151;
             --black: #0A0A0A;
         }
         
         body {
             font-family: "Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
             background: var(--black);
-            color: var(--gray-light);
+            color: #E5E5E5;
             min-height: 100vh;
             padding: 40px 20px;
         }
         
-        .container { 
-            max-width: 800px; 
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
         
-        /* Vertical flow */
-        .flow {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
+        .flow { display: flex; flex-direction: column; gap: 0; }
         
-        /* Step cards */
-        .step {
-            width: 100%;
-        }
+        .step { width: 100%; }
         
         .step-card {
             border-radius: 12px;
             padding: 24px 28px;
             position: relative;
+            background: #111;
         }
         
         .step-badge {
@@ -90,10 +77,6 @@
             font-size: 0.9rem;
         }
         
-        .step-titles {
-            flex: 1;
-        }
-        
         .step-tag {
             font-size: 0.65rem;
             text-transform: uppercase;
@@ -112,34 +95,27 @@
             line-height: 1.6;
         }
         
-        /* Arrows */
         .arrow {
             display: flex;
             justify-content: center;
             padding: 12px 0;
         }
         
-        .arrow svg {
-            width: 24px;
-            height: 24px;
-        }
+        .arrow svg { width: 24px; height: 24px; }
         
-        /* Intent - Seqera (Purple) */
-        .step-card.intent {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.12) 0%, rgba(124, 58, 237, 0.04) 100%);
-            border: 1px solid rgba(124, 58, 237, 0.35);
-        }
+        /* Intent - Purple */
+        .step-card.intent { border: 1px solid rgba(124, 58, 237, 0.35); }
         .step-card.intent .step-badge { color: var(--purple); }
         .step-card.intent .step-icon { background: var(--purple); color: var(--white); }
         .step-card.intent .step-tag { color: var(--purple); }
-        .step-card.intent .step-title { color: #A78BFA; }
+        .step-card.intent .step-title { color: var(--purple-light); }
         .step-card.intent .step-content { color: #C4B5FD; }
         .arrow.purple svg { stroke: var(--purple); }
         
-        /* Gap - Pink */
+        /* Gap - Red */
         .gap-card {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(236, 72, 153, 0.04) 100%);
-            border: 1px solid rgba(236, 72, 153, 0.4);
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.4);
             border-radius: 12px;
             padding: 20px 28px;
             text-align: center;
@@ -155,40 +131,34 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.15em;
-            color: var(--pink);
+            color: var(--red);
             margin-bottom: 10px;
         }
         
         .gap-stat {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--pink);
+            color: var(--red);
             margin-bottom: 6px;
         }
         
         .gap-text {
             font-size: 0.95rem;
-            color: var(--pink-light);
+            color: var(--red-light);
         }
-        .arrow.pink svg { stroke: var(--pink); }
+        .arrow.red svg { stroke: var(--red); }
         
-        /* Execution - Kernel (Blue) */
-        .step-card.execution {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(37, 99, 235, 0.04) 100%);
-            border: 1px solid rgba(37, 99, 235, 0.35);
-        }
-        .step-card.execution .step-badge { color: var(--blue); }
-        .step-card.execution .step-icon { background: var(--blue-dark); color: var(--white); }
-        .step-card.execution .step-tag { color: var(--blue); }
-        .step-card.execution .step-title { color: #60A5FA; }
-        .step-card.execution .step-content { color: #93C5FD; }
-        .arrow.blue svg { stroke: var(--blue); }
+        /* Execution - Gray */
+        .step-card.execution { border: 1px solid rgba(107, 114, 128, 0.35); }
+        .step-card.execution .step-badge { color: var(--gray); }
+        .step-card.execution .step-icon { background: var(--gray); color: var(--white); }
+        .step-card.execution .step-tag { color: var(--gray); }
+        .step-card.execution .step-title { color: var(--gray-light); }
+        .step-card.execution .step-content { color: #D1D5DB; }
+        .arrow.gray svg { stroke: var(--gray); }
         
-        /* Reality - Tracer (Teal) */
-        .step-card.reality {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.04) 100%);
-            border: 1px solid rgba(16, 185, 129, 0.35);
-        }
+        /* Reality - Teal */
+        .step-card.reality { border: 1px solid rgba(16, 185, 129, 0.35); }
         .step-card.reality .step-badge { color: var(--teal); }
         .step-card.reality .step-icon { background: var(--teal); color: var(--white); }
         .step-card.reality .step-tag { color: var(--teal); }
@@ -225,7 +195,7 @@
         
         .util-fill { height: 100%; border-radius: 4px; }
         .util-fill.low { background: var(--teal); }
-        .util-fill.high { background: var(--pink); }
+        .util-fill.high { background: var(--red); }
         
         .util-value {
             width: 50px;
@@ -234,40 +204,36 @@
             font-weight: 600;
         }
         .util-value.low { color: var(--teal-light); }
-        .util-value.high { color: var(--pink); }
+        .util-value.high { color: var(--red); }
         
         .diagnosis {
             margin-top: 14px;
-            background: rgba(236, 72, 153, 0.1);
-            border-left: 3px solid var(--pink);
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid var(--red);
             padding: 10px 14px;
             border-radius: 6px;
             font-size: 0.85rem;
-            color: var(--pink-light);
+            color: var(--red-light);
         }
-        .diagnosis strong { color: var(--pink); }
+        .diagnosis strong { color: var(--red); }
         
         .arrow.teal svg { stroke: var(--teal); }
         
-        /* Fix - Cyan/Mint */
-        .step-card.fix {
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(34, 211, 238, 0.04) 100%);
-            border: 1px solid rgba(34, 211, 238, 0.4);
-        }
-        .step-card.fix .step-badge { color: var(--cyan); }
-        .step-card.fix .step-icon { background: var(--cyan); color: var(--black); }
-        .step-card.fix .step-tag { color: var(--cyan); }
-        .step-card.fix .step-title { color: var(--cyan); }
-        .step-card.fix .step-content { color: #A5F3FC; }
+        /* Fix - Green */
+        .step-card.fix { border: 1px solid rgba(34, 197, 94, 0.4); }
+        .step-card.fix .step-badge { color: var(--green); }
+        .step-card.fix .step-icon { background: var(--green); color: var(--black); }
+        .step-card.fix .step-tag { color: var(--green); }
+        .step-card.fix .step-title { color: var(--green); }
+        .step-card.fix .step-content { color: var(--green-light); }
         
         .savings {
             margin-top: 14px;
             font-size: 1.1rem;
             font-weight: 700;
-            color: var(--mint);
+            color: var(--green);
         }
         
-        /* Mobile */
         @media (max-width: 600px) {
             .step-card { padding: 20px; }
             .step-title { font-size: 1.1rem; }
@@ -313,7 +279,7 @@
                 </div>
             </div>
             
-            <div class="arrow pink">
+            <div class="arrow red">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
                     <path d="M12 5v14M5 12l7 7 7-7"/>
                 </svg>
@@ -338,7 +304,7 @@
                 </div>
             </div>
             
-            <div class="arrow blue">
+            <div class="arrow gray">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
                     <path d="M12 5v14M5 12l7 7 7-7"/>
                 </svg>
