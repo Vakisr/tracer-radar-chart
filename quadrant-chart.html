@@ -12,10 +12,10 @@
         :root {
             --purple: #7C3AED;
             --purple-light: #A78BFA;
-            --teal: #10B981;
-            --teal-light: #34D399;
-            --green: #22C55E;
-            --green-light: #86EFAC;
+            --teal: #3B82F6;
+            --teal-light: #60A5FA;
+            --green: #10B981;
+            --green-light: #34D399;
             --red: #EF4444;
             --red-light: #FCA5A5;
             --gray: #6B7280;
@@ -250,7 +250,7 @@
                 <div class="step-card intent">
                     <div class="step-badge">1. Intent</div>
                     <div class="step-header">
-                        <div class="step-icon">S</div>
+                        
                         <div class="step-titles">
                             <div class="step-tag">The Orchestrator</div>
                             <div class="step-title">Seqera / Nextflow</div>
@@ -264,7 +264,7 @@
                 </div>
             </div>
             
-            <div class="arrow purple">
+            <div class="arrow gray">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
                     <path d="M12 5v14M5 12l7 7 7-7"/>
                 </svg>
@@ -279,7 +279,7 @@
                 </div>
             </div>
             
-            <div class="arrow red">
+            <div class="arrow gray">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
                     <path d="M12 5v14M5 12l7 7 7-7"/>
                 </svg>
@@ -290,7 +290,7 @@
                 <div class="step-card execution">
                     <div class="step-badge">2. Execution</div>
                     <div class="step-header">
-                        <div class="step-icon">K</div>
+                        
                         <div class="step-titles">
                             <div class="step-tag">The Execution Layer</div>
                             <div class="step-title">Kernel / Hardware</div>
@@ -299,7 +299,7 @@
                     <div class="step-content">
                         Instance: r5.16xlarge<br>
                         Job #4521 running...<br>
-                        Task: FASTQC<br>
+                        Task: STAR<br>
                         Duration: 47 min
                     </div>
                 </div>
@@ -316,14 +316,14 @@
                 <div class="step-card reality">
                     <div class="step-badge">3. Reality</div>
                     <div class="step-header">
-                        <div class="step-icon">T</div>
+                        
                         <div class="step-titles">
                             <div class="step-tag">Pipeline Intelligence</div>
                             <div class="step-title">Tracer</div>
                         </div>
                     </div>
                     <div class="pipeline-tag">
-                        Mapped to: rnaseq_analysis → FASTQC → Job #4521
+                        Mapped to: rnaseq_analysis → STAR → Job #4521
                     </div>
                     <div class="util-row">
                         <span class="util-label">CPU</span>
@@ -346,7 +346,7 @@
                 </div>
             </div>
             
-            <div class="arrow teal">
+            <div class="arrow gray">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
                     <path d="M12 5v14M5 12l7 7 7-7"/>
                 </svg>
@@ -357,7 +357,7 @@
                 <div class="step-card fix">
                     <div class="step-badge">4. The Fix</div>
                     <div class="step-header">
-                        <div class="step-icon">✓</div>
+                        
                         <div class="step-titles">
                             <div class="step-tag">Tracer Recommendation</div>
                             <div class="step-title">Right-sized Configuration</div>
@@ -369,7 +369,7 @@
                         Memory: 64 GB<br>
                         Storage: NVMe SSD
                     </div>
-                    <div class="savings">→ Save 78% on compute costs</div>
+                    <div class="savings">→ Save ~85% on compute costs and improve runtime by 3.7x</div>
                 </div>
             </div>
             
