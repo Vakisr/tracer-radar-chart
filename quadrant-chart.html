@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seqera vs Tracer - Positioning Matrix</title>
+    <title>Seqera + Tracer - Pipeline Intelligence</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap');
         
@@ -16,351 +16,354 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            padding: 40px 20px;
         }
         
-        .container { max-width: 1000px; width: 100%; }
+        .container { max-width: 600px; width: 100%; }
         
-        .matrix-wrapper {
-            position: relative;
-            padding: 50px 120px;
-        }
-        
-        .matrix-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .y-axis, .x-axis { position: absolute; background: #444; }
-        .y-axis { left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-50%); }
-        .x-axis { top: 50%; left: 0; right: 0; height: 2px; transform: translateY(-50%); }
-        
-        .y-axis::before, .y-axis::after, .x-axis::before, .x-axis::after {
-            content: '';
-            position: absolute;
-            border: 6px solid transparent;
-        }
-        .y-axis::before { top: -6px; left: 50%; transform: translateX(-50%); border-bottom-color: #444; }
-        .y-axis::after { bottom: -6px; left: 50%; transform: translateX(-50%); border-top-color: #444; }
-        .x-axis::before { left: -6px; top: 50%; transform: translateY(-50%); border-right-color: #444; }
-        .x-axis::after { right: -6px; top: 50%; transform: translateY(-50%); border-left-color: #444; }
-        
-        .axis-label {
-            position: absolute;
-            font-family: 'Chakra Petch', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-        .axis-label.top { top: -40px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
-        .axis-label.bottom { bottom: -40px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
-        .axis-label.left { left: -60px; top: 50%; transform: translateY(-50%); }
-        .axis-label.right { right: -65px; top: 50%; transform: translateY(-50%); }
-        
-        .quadrant {
-            position: absolute;
-            width: 46%;
-            height: 46%;
-            border-radius: 16px;
-            padding: 24px;
+        /* Vertical flow */
+        .flow {
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
-        }
-        
-        .quadrant:hover { transform: scale(1.02); }
-        
-        .quadrant.top-left {
-            top: 2%; left: 2%;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.04) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-        }
-        .quadrant.top-left:hover { box-shadow: 0 0 50px rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.5); }
-        
-        .quadrant.bottom-right {
-            bottom: 2%; right: 2%;
-            background: linear-gradient(135deg, rgba(39, 191, 159, 0.12) 0%, rgba(39, 191, 159, 0.04) 100%);
-            border: 1px solid rgba(39, 191, 159, 0.25);
-        }
-        .quadrant.bottom-right:hover { box-shadow: 0 0 50px rgba(39, 191, 159, 0.15); border-color: rgba(39, 191, 159, 0.5); }
-        
-        .quadrant.top-right, .quadrant.bottom-left {
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px dashed rgba(255, 255, 255, 0.08);
-        }
-        .quadrant.top-right { top: 2%; right: 2%; }
-        .quadrant.bottom-left { bottom: 2%; left: 2%; }
-        
-        .quadrant-header { margin-bottom: 16px; }
-        
-        .quadrant-tag {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 8px;
-            opacity: 0.7;
-        }
-        .top-left .quadrant-tag { color: #3b82f6; }
-        .bottom-right .quadrant-tag { color: #27BF9F; }
-        
-        .quadrant-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .top-left .quadrant-title { color: #60a5fa; }
-        .bottom-right .quadrant-title { color: #34d399; }
-        
-        .quadrant-context {
-            font-size: 0.95rem;
-            color: #aaa;
-            line-height: 1.5;
-            flex: 1;
-        }
-        
-        .quadrant-voice {
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-top: auto;
-            line-height: 1.4;
-            font-family: monospace;
-        }
-        .top-left .quadrant-voice {
-            background: rgba(59, 130, 246, 0.1);
-            color: #93c5fd;
-            border-left: 3px solid #3b82f6;
-        }
-        .bottom-right .quadrant-voice {
-            background: rgba(39, 191, 159, 0.1);
-            color: #6ee7b7;
-            border-left: 3px solid #27BF9F;
-        }
-        
-        .tap-hint { display: none; }
-        
-        /* Mobile styles */
-        @media (max-width: 700px) {
-            .matrix-wrapper { padding: 35px 50px; }
-            
-            .axis-label { font-size: 0.55rem; }
-            .axis-label.left { left: -40px; }
-            .axis-label.right { right: -45px; }
-            
-            .quadrant {
-                padding: 16px;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                cursor: pointer;
-            }
-            
-            .quadrant:active { transform: scale(0.98); }
-            
-            .quadrant-header { margin-bottom: 0; }
-            
-            .quadrant-tag { font-size: 0.65rem; margin-bottom: 4px; }
-            .quadrant-title { font-size: 1rem; margin-bottom: 0; }
-            
-            .quadrant-context,
-            .quadrant-voice { display: none; }
-            
-            .tap-hint {
-                display: block;
-                font-size: 0.55rem;
-                color: #666;
-                margin-top: 8px;
-            }
-        }
-        
-        /* Popup - only functional on mobile */
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            display: none;
-            justify-content: center;
             align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-        .popup-overlay.active { display: flex; }
-        
-        .popup {
-            background: #1a1a1a;
-            border-radius: 16px;
-            padding: 28px;
-            max-width: 400px;
-            width: 100%;
             position: relative;
-            animation: popupIn 0.2s ease;
         }
         
-        @keyframes popupIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
-        .popup.seqera { border: 1px solid rgba(59, 130, 246, 0.4); }
-        .popup.tracer { border: 1px solid rgba(39, 191, 159, 0.4); }
-        
-        .popup-close {
+        /* Vertical connector line */
+        .flow::before {
+            content: '';
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: none;
-            border: none;
-            color: #666;
-            font-size: 1.5rem;
-            cursor: pointer;
-            line-height: 1;
-            padding: 4px;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, 
+                #3b82f6 0%, 
+                #3b82f6 20%,
+                #ef4444 35%,
+                #ef4444 50%,
+                #27BF9F 65%,
+                #22c55e 100%
+            );
+            z-index: 0;
         }
-        .popup-close:hover { color: #fff; }
         
-        .popup-tag {
-            font-size: 0.75rem;
+        /* Step cards */
+        .step {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+        }
+        
+        .step-card {
+            background: #111;
+            border-radius: 12px;
+            padding: 20px 24px;
+            position: relative;
+        }
+        
+        .step-badge {
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            background: #0a0a0a;
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.15em;
-            margin-bottom: 8px;
-            opacity: 0.8;
         }
-        .popup.seqera .popup-tag { color: #3b82f6; }
-        .popup.tracer .popup-tag { color: #27BF9F; }
         
-        .popup-title {
-            font-size: 1.5rem;
+        .step-tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 16px;
-        }
-        .popup.seqera .popup-title { color: #60a5fa; }
-        .popup.tracer .popup-title { color: #34d399; }
-        
-        .popup-context {
-            font-size: 0.95rem;
-            color: #aaa;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         
-        .popup-data {
+        .step-context {
             font-size: 0.85rem;
-            padding: 14px 16px;
-            border-radius: 8px;
+            color: #999;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+        
+        /* Step 1: Intent */
+        .step.intent .step-card {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .step.intent .step-badge { color: #3b82f6; }
+        .step.intent .step-tag { color: #3b82f6; }
+        .step.intent .step-title { color: #60a5fa; }
+        
+        .resource-box {
             font-family: monospace;
-            line-height: 1.6;
-        }
-        .popup.seqera .popup-data {
-            background: rgba(59, 130, 246, 0.1);
-            color: #93c5fd;
+            font-size: 0.85rem;
+            background: rgba(59, 130, 246, 0.08);
             border-left: 3px solid #3b82f6;
+            padding: 12px 14px;
+            border-radius: 6px;
+            color: #93c5fd;
         }
-        .popup.tracer .popup-data {
+        .resource-box .label {
+            color: #6b7280;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 6px;
+            display: block;
+        }
+        
+        /* Connector arrow */
+        .connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .connector-arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+        }
+        
+        .connector-arrow.blue { border-top: 12px solid #3b82f6; }
+        .connector-arrow.red { border-top: 12px solid #ef4444; }
+        .connector-arrow.teal { border-top: 12px solid #27BF9F; }
+        .connector-arrow.green { border-top: 12px solid #22c55e; }
+        
+        /* Step 2: The Gap */
+        .step.gap .step-card {
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.05);
+            text-align: center;
+        }
+        .step.gap .step-badge { color: #ef4444; }
+        .step.gap .step-title { 
+            color: #fca5a5; 
+            font-size: 1.1rem;
+        }
+        
+        .gap-stat {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ef4444;
+            margin: 10px 0;
+        }
+        
+        .gap-detail {
+            font-size: 0.85rem;
+            color: #fca5a5;
+        }
+        
+        /* Step 3: Reality */
+        .step.reality .step-card {
+            border: 1px solid rgba(39, 191, 159, 0.3);
+        }
+        .step.reality .step-badge { color: #27BF9F; }
+        .step.reality .step-tag { color: #27BF9F; }
+        .step.reality .step-title { color: #34d399; }
+        
+        .pipeline-mapping {
+            font-size: 0.75rem;
+            color: #27BF9F;
             background: rgba(39, 191, 159, 0.1);
-            color: #6ee7b7;
-            border-left: 3px solid #27BF9F;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            display: inline-block;
+        }
+        .pipeline-mapping span { color: #6ee7b7; font-weight: 600; }
+        
+        .utilization-grid {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        
+        .util-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .util-label {
+            color: #888;
+            width: 70px;
+        }
+        
+        .util-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .util-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .util-fill.low { background: #22c55e; }
+        .util-fill.high { background: #ef4444; }
+        
+        .util-value {
+            width: 40px;
+            text-align: right;
+            font-family: monospace;
+            font-weight: 600;
+        }
+        .util-value.low { color: #22c55e; }
+        .util-value.high { color: #ef4444; }
+        
+        .diagnosis {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            color: #fca5a5;
+        }
+        .diagnosis strong { color: #ef4444; }
+        
+        /* Step 4: The Fix */
+        .step.fix .step-card {
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.02) 100%);
+        }
+        .step.fix .step-badge { color: #22c55e; }
+        .step.fix .step-tag { color: #22c55e; }
+        .step.fix .step-title { color: #4ade80; }
+        
+        .fix-config {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #86efac;
+            margin-bottom: 12px;
+        }
+        
+        .savings {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+        
+        /* Mobile adjustments */
+        @media (max-width: 500px) {
+            .container { padding: 10px; }
+            
+            .step-card { padding: 16px 18px; }
+            .step-title { font-size: 1.1rem; }
+            .gap-stat { font-size: 1.6rem; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="matrix-wrapper">
-            <div class="matrix-container">
-                <div class="y-axis"></div>
-                <div class="x-axis"></div>
-                
-                <div class="axis-label top">THE DEFINITION / YOUR CODE</div>
-                <div class="axis-label bottom">THE EXECUTION / KERNEL</div>
-                <div class="axis-label left">INTENT</div>
-                <div class="axis-label right">REALITY</div>
-                
-                <div class="quadrant top-left" onclick="showPopup('seqera')">
-                    <div class="quadrant-header">
-                        <div class="quadrant-tag">The Orchestrator</div>
-                        <div class="quadrant-title">Seqera / Nextflow</div>
+        <div class="flow">
+            
+            <!-- Step 1: Intent -->
+            <div class="step intent">
+                <div class="step-card">
+                    <div class="step-badge">1. Intent</div>
+                    <div class="step-tag">The Orchestrator</div>
+                    <div class="step-title">Seqera / Nextflow</div>
+                    <div class="step-context">
+                        Defines workflows and dispatches jobs. This is what you <em>requested</em>.
                     </div>
-                    <div class="quadrant-context">
-                        Defines the workflow and pushes jobs to the queue. It is the "Input."
+                    <div class="resource-box">
+                        <span class="label">Pipeline: rnaseq_analysis</span>
+                        vCPU: 64 &nbsp;|&nbsp; Memory: 488 GB
                     </div>
-                    <div class="quadrant-voice">{"type": "VCPU", "value": "64"},<br>{"type": "MEMORY", "value": "499712"}</div>
-                    <div class="tap-hint">Tap for details</div>
-                </div>
-                
-                <div class="quadrant top-right"></div>
-                <div class="quadrant bottom-left"></div>
-                
-                <div class="quadrant bottom-right" onclick="showPopup('tracer')">
-                    <div class="quadrant-header">
-                        <div class="quadrant-tag">Compute intelligence</div>
-                        <div class="quadrant-title">Tracer</div>
-                    </div>
-                    <div class="quadrant-context">
-                        Reads Kernel signals, maps them back to Pipeline ID, Jobs, tasks, users, and exposes the physical truth.
-                    </div>
-                    <div class="quadrant-voice">CPU utilization 8%<br>Memory utilization 18%<br>Disk utilization 114%</div>
-                    <div class="tap-hint">Tap for details</div>
                 </div>
             </div>
+            
+            <div class="connector">
+                <div class="connector-arrow blue"></div>
+            </div>
+            
+            <!-- Step 2: The Gap -->
+            <div class="step gap">
+                <div class="step-card">
+                    <div class="step-badge">The Gap</div>
+                    <div class="step-title">Wasted Spend</div>
+                    <div class="gap-stat">92% CPU Idle</div>
+                    <div class="gap-detail">You're paying for compute you don't use.</div>
+                </div>
+            </div>
+            
+            <div class="connector">
+                <div class="connector-arrow red"></div>
+            </div>
+            
+            <!-- Step 3: Reality -->
+            <div class="step reality">
+                <div class="step-card">
+                    <div class="step-badge">2. Reality</div>
+                    <div class="step-tag">Pipeline Intelligence</div>
+                    <div class="step-title">Tracer</div>
+                    <div class="pipeline-mapping">
+                        Task: <span>FASTQC</span> → Job: <span>#4521</span> → Pipeline: <span>rnaseq_analysis</span>
+                    </div>
+                    <div class="step-context">
+                        Maps kernel signals back to your specific pipeline tasks. We know where <em>your pipeline</em> bottlenecks are.
+                    </div>
+                    <div class="utilization-grid">
+                        <div class="util-row">
+                            <span class="util-label">CPU</span>
+                            <div class="util-bar"><div class="util-fill low" style="width: 8%"></div></div>
+                            <span class="util-value low">8%</span>
+                        </div>
+                        <div class="util-row">
+                            <span class="util-label">Memory</span>
+                            <div class="util-bar"><div class="util-fill low" style="width: 18%"></div></div>
+                            <span class="util-value low">18%</span>
+                        </div>
+                        <div class="util-row">
+                            <span class="util-label">Disk I/O</span>
+                            <div class="util-bar"><div class="util-fill high" style="width: 100%"></div></div>
+                            <span class="util-value high">114%</span>
+                        </div>
+                    </div>
+                    <div class="diagnosis">
+                        <strong>Diagnosis:</strong> You're I/O bound. Adding RAM or CPU won't help.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connector">
+                <div class="connector-arrow teal"></div>
+            </div>
+            
+            <!-- Step 4: The Fix -->
+            <div class="step fix">
+                <div class="step-card">
+                    <div class="step-badge">3. The Fix</div>
+                    <div class="step-tag">Tracer Recommendation</div>
+                    <div class="step-title">Right-sized Configuration</div>
+                    <div class="fix-config">
+                        vCPU: 8 &nbsp;|&nbsp; Memory: 64 GB &nbsp;|&nbsp; Storage: NVMe SSD
+                    </div>
+                    <div class="savings">→ Save 78% on compute costs</div>
+                </div>
+            </div>
+            
         </div>
     </div>
-    
-    <!-- Popup Overlay (mobile only) -->
-    <div class="popup-overlay" onclick="hidePopup(event)">
-        <div class="popup seqera" id="popup-seqera">
-            <button class="popup-close" onclick="hidePopup(event)">&times;</button>
-            <div class="popup-tag">The Orchestrator</div>
-            <div class="popup-title">Seqera / Nextflow</div>
-            <div class="popup-context">Defines the workflow and pushes jobs to the queue. It is the "Input."</div>
-            <div class="popup-data">{"type": "VCPU", "value": "64"},<br>{"type": "MEMORY", "value": "499712"}</div>
-        </div>
-        
-        <div class="popup tracer" id="popup-tracer" style="display: none;">
-            <button class="popup-close" onclick="hidePopup(event)">&times;</button>
-            <div class="popup-tag">Compute intelligence</div>
-            <div class="popup-title">Tracer</div>
-            <div class="popup-context">Reads Kernel signals, maps them back to Pipeline ID, Jobs, tasks, users, and exposes the physical truth.</div>
-            <div class="popup-data">CPU utilization 8%<br>Memory utilization 18%<br>Disk utilization 114%</div>
-        </div>
-    </div>
-    
-    <script>
-        function isMobile() {
-            return window.innerWidth <= 700;
-        }
-        
-        function showPopup(type) {
-            if (!isMobile()) return; // Only show popup on mobile
-            
-            const overlay = document.querySelector('.popup-overlay');
-            const seqeraPopup = document.getElementById('popup-seqera');
-            const tracerPopup = document.getElementById('popup-tracer');
-            
-            if (type === 'seqera') {
-                seqeraPopup.style.display = 'block';
-                tracerPopup.style.display = 'none';
-            } else {
-                seqeraPopup.style.display = 'none';
-                tracerPopup.style.display = 'block';
-            }
-            
-            overlay.classList.add('active');
-        }
-        
-        function hidePopup(event) {
-            if (event.target.classList.contains('popup-overlay') || event.target.classList.contains('popup-close')) {
-                document.querySelector('.popup-overlay').classList.remove('active');
-            }
-        }
-    </script>
 </body>
 </html>
