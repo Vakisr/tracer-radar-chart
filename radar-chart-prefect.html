@@ -143,11 +143,11 @@
         <div class="legend">
             <div class="legend-item">
                 <div class="legend-color" style="background: #3b82f6;"></div>
-                <span>Prefect-ONLY</span>
+                <span>Prefect (orchestration visibility)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #27BF9F;"></div>
-                <span>Prefect + Tracer</span>
+                <span>Prefect + Tracer (execution visibility)</span>
             </div>
         </div>
         <div class="hint">Hover over the chart to see detailed descriptions</div>
@@ -169,8 +169,8 @@
             ],
             datasets: [
                 {
-                    label: 'Prefect-ONLY',
-                    data: [4, 2, 1, 0, 0, 2, 1, 5, 2],
+                    label: 'Prefect (orchestration)',
+                    data: [4, 2, 2, 0, 0, 2, 1, 4, 2],
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.15)',
                     fill: true,
@@ -184,19 +184,19 @@
                     pointHoverBorderColor: '#3b82f6',
                     pointHoverBorderWidth: 3,
                     descriptions: [
-                        'Only Prefect Platform',
-                        'Basic metrics per task',
-                        'N/A, only Python flows',
-                        'N/A',
-                        'N/A',
-                        'Manual via dashboard',
-                        'Limited detection capabilities',
-                        'Optimized for Python workflows',
+                        'Strong orchestration: scheduling, retries, state, concurrency, UI',
+                        'Task state, logs, durations, retries. No system-level signals',
+                        'Python-first, can call shell but not natively observe it',
+                        'Does not inspect syscalls, cgroups, or kernel scheduling',
+                        'Captures emitted logs, does not generate from execution behavior',
+                        'Shows durations and timing, no cost attribution or sizing',
+                        'Alerts on failures/retries, not idle CPUs or I/O saturation',
+                        'Strong in Python-heavy environments, less for mixed toolchains',
                         'Task/runtime level'
                     ]
                 },
                 {
-                    label: 'Prefect + Tracer',
+                    label: 'Prefect + Tracer (execution)',
                     data: [5, 5, 5, 5, 5, 5, 5, 5, 5],
                     borderColor: '#27BF9F',
                     backgroundColor: 'rgba(39, 191, 159, 0.15)',
