@@ -114,12 +114,6 @@
             color: #6b7280;
             line-height: 1.5;
         }
-        .tooltip-score {
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-        .grafana { color: #F46800; }
-        .tracer { color: #27BF9F; }
         @media (prefers-color-scheme: dark) {
             .tooltip-title {
                 color: #ffffff;
@@ -130,9 +124,9 @@
         }
         .hint {
             text-align: center;
+            margin-top: 16px;
             color: #6b7280;
             font-size: 13px;
-            margin-top: 16px;
         }
     </style>
 </head>
@@ -141,95 +135,81 @@
         <canvas id="radarChart"></canvas>
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-color" style="background: #F46800;"></div>
-                <span>Grafana (visualization layer)</span>
+                <div class="legend-color" style="background: #3b82f6;"></div>
+                <span>Grafana</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #27BF9F;"></div>
-                <span>Grafana + Tracer (execution visibility)</span>
+                <span>Grafana + Tracer</span>
             </div>
         </div>
         <div class="hint">Hover over the chart to see detailed descriptions</div>
     </div>
-    <div id="tooltip" class="tooltip"></div>
+    <div id="tooltip" class="tooltip">
+        <div class="tooltip-title"></div>
+        <div class="tooltip-content"></div>
+    </div>
 
     <script>
-        const data = {
-            labels: [
-                ['Dashboard', 'Flexibility'],
-                ['Pipeline', 'Visibility'],
-                ['Execution', 'Level', 'Data'],
-                ['Short-lived', 'Job', 'Capture'],
-                ['Cost', 'Attribution'],
-                ['Setup', 'Simplicity'],
-                ['Alerting', 'Capabilities'],
-                ['Scientific', 'Workload', 'Suitability'],
-                ['Built-in', 'Dashboards']
-            ],
-            datasets: [
-                {
-                    label: 'Grafana (visualization)',
-                    data: [5, 1, 1, 1, 0, 2, 4, 2, 1],
-                    borderColor: '#F46800',
-                    backgroundColor: 'rgba(244, 104, 0, 0.15)',
-                    fill: true,
-                    borderWidth: 2.5,
-                    pointBackgroundColor: '#F46800',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#F46800',
-                    pointHoverBorderWidth: 3,
-                    descriptions: [
-                        'Highly flexible dashboards with configurable panels, queries, and layouts',
-                        'No inherent pipeline awareness; requires manual tagging and custom queries',
-                        'Displays metrics from external sources; does not collect execution data',
-                        'May miss short-lived jobs depending on scrape interval and exporters',
-                        'No built-in cost tracking; requires external tools or custom metrics',
-                        'Requires multiple components: Prometheus, exporters, data sources, dashboards',
-                        'Strong alerting based on thresholds and rules from connected data sources',
-                        'General-purpose; not designed for scientific pipeline workflows',
-                        'Dashboards must be manually created and configured'
-                    ]
-                },
-                {
-                    label: 'Grafana + Tracer (execution)',
-                    data: [5, 5, 5, 5, 5, 5, 5, 5, 5],
-                    borderColor: '#27BF9F',
-                    backgroundColor: 'rgba(39, 191, 159, 0.15)',
-                    fill: true,
-                    borderWidth: 2.5,
-                    pointBackgroundColor: '#27BF9F',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#27BF9F',
-                    pointHoverBorderWidth: 3,
-                    descriptions: [
-                        'Grafana dashboards plus Tracer execution-aware views organized by pipeline',
-                        'Full pipeline visibility: runs, tasks, tools, and execution context',
-                        'Observes CPU, memory, I/O, network directly from host and container runtime',
-                        'Captures all processes including short-lived jobs and containers',
-                        'Built-in cost attribution to pipelines, runs, tasks, and tools',
-                        'One-line install; works alongside existing Grafana without changes',
-                        'Tracer alerting based on execution behavior plus Grafana threshold alerts',
-                        'Purpose-built for scientific, data, and HPC pipeline environments',
-                        'Ready-to-use dashboards for pipeline performance, failures, and cost'
-                    ]
-                }
-            ]
+        const axisDescriptions = {
+            'Execution Unit Awareness': 'Ability to organize telemetry around pipeline runs, tasks, and tools rather than services or hosts.',
+            'Short-lived Process Visibility': 'Capturing behavior of processes and containers that run for seconds or minutes.',
+            'Pipeline/Run Attribution': 'Associating resource usage and behavior with specific pipeline runs and execution steps.',
+            'Cost Attribution Granularity': 'Breaking down compute costs by pipeline, run, task, or tool.',
+            'Host-observed Behavior': 'Observing actual runtime behavior from the host and container runtime.',
+            'Dashboard Flexibility': 'Ability to build custom visualizations from arbitrary data sources and queries.'
         };
 
-        const config = {
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        const chart = new Chart(ctx, {
             type: 'radar',
-            data: data,
+            data: {
+                labels: [
+                    'Execution Unit Awareness',
+                    'Short-lived Process Visibility',
+                    'Pipeline/Run Attribution',
+                    'Cost Attribution Granularity',
+                    'Host-observed Behavior',
+                    'Dashboard Flexibility'
+                ],
+                datasets: [
+                    {
+                        label: 'Grafana',
+                        data: [1, 1, 1, 1, 1, 5],
+                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#3b82f6',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    },
+                    {
+                        label: 'Grafana + Tracer',
+                        data: [5, 5, 5, 5, 5, 5],
+                        backgroundColor: 'rgba(39, 191, 159, 0.15)',
+                        borderColor: '#27BF9F',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#27BF9F',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }
+                ]
+            },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
                 scales: {
                     r: {
                         beginAtZero: true,
@@ -240,253 +220,80 @@
                             display: false
                         },
                         grid: {
-                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#374151' : '#e5e7eb',
                             circular: true
                         },
                         angleLines: {
-                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'
+                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#374151' : '#e5e7eb',
                         },
                         pointLabels: {
                             font: {
+                                family: '"Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
                                 size: 12,
-                                weight: 500
+                                weight: '500'
                             },
                             color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ffffff' : '#374151',
-                            padding: 35
+                            padding: 16
                         }
                     }
                 },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                },
                 interaction: {
-                    mode: 'point',
-                    intersect: false
-                }
-            }
-        };
-
-        function isPointInPolygon(x, y, polygon) {
-            let inside = false;
-            for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-                const xi = polygon[i].x, yi = polygon[i].y;
-                const xj = polygon[j].x, yj = polygon[j].y;
-                if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
-                    inside = !inside;
-                }
-            }
-            return inside;
-        }
-
-        function getDatasetPolygon(chartInstance, datasetIndex) {
-            const meta = chartInstance.getDatasetMeta(datasetIndex);
-            const points = [];
-            meta.data.forEach(point => {
-                points.push({ x: point.x, y: point.y });
-            });
-            return points;
-        }
-
-        function getHoveredDataset(chartInstance, mouseX, mouseY) {
-            const polygon0 = getDatasetPolygon(chartInstance, 0);
-            if (isPointInPolygon(mouseX, mouseY, polygon0)) {
-                return 0;
-            }
-            const polygon1 = getDatasetPolygon(chartInstance, 1);
-            if (isPointInPolygon(mouseX, mouseY, polygon1)) {
-                return 1;
-            }
-            return -1;
-        }
-
-        function highlightDataset(chartInstance, datasetIndex) {
-            chartInstance.data.datasets.forEach((dataset, i) => {
-                if (i === datasetIndex) {
-                    dataset.borderColor = i === 0 ? '#F46800' : '#27BF9F';
-                    dataset.backgroundColor = i === 0 ? 'rgba(244, 104, 0, 0.25)' : 'rgba(39, 191, 159, 0.25)';
-                    dataset.pointBackgroundColor = i === 0 ? '#F46800' : '#27BF9F';
-                    dataset.pointBorderColor = '#fff';
-                    dataset.borderWidth = 3.5;
-                } else {
-                    dataset.borderColor = i === 0 ? 'rgba(244, 104, 0, 0.2)' : 'rgba(39, 191, 159, 0.2)';
-                    dataset.backgroundColor = i === 0 ? 'rgba(244, 104, 0, 0.05)' : 'rgba(39, 191, 159, 0.05)';
-                    dataset.pointBackgroundColor = i === 0 ? 'rgba(244, 104, 0, 0.2)' : 'rgba(39, 191, 159, 0.2)';
-                    dataset.pointBorderColor = i === 0 ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.2)';
-                    dataset.borderWidth = 2;
-                }
-            });
-            chartInstance.update('none');
-        }
-
-        function resetHighlight(chartInstance) {
-            chartInstance.data.datasets[0].borderColor = '#F46800';
-            chartInstance.data.datasets[0].backgroundColor = 'rgba(244, 104, 0, 0.15)';
-            chartInstance.data.datasets[0].pointBackgroundColor = '#F46800';
-            chartInstance.data.datasets[0].pointBorderColor = '#fff';
-            chartInstance.data.datasets[0].borderWidth = 2.5;
-
-            chartInstance.data.datasets[1].borderColor = '#27BF9F';
-            chartInstance.data.datasets[1].backgroundColor = 'rgba(39, 191, 159, 0.15)';
-            chartInstance.data.datasets[1].pointBackgroundColor = '#27BF9F';
-            chartInstance.data.datasets[1].pointBorderColor = '#fff';
-            chartInstance.data.datasets[1].borderWidth = 2.5;
-
-            chartInstance.update('none');
-        }
-
-        const transparentBackgroundPlugin = {
-            id: 'transparentBackground',
-            beforeDraw: (chart) => {
-                const ctx = chart.ctx;
-                ctx.save();
-                ctx.globalCompositeOperation = 'destination-over';
-                ctx.fillStyle = 'transparent';
-                ctx.fillRect(0, 0, chart.width, chart.height);
-                ctx.restore();
-            }
-        };
-
-        const canvasEl = document.getElementById('radarChart');
-        const ctx = canvasEl.getContext('2d');
-        const chart = new Chart(ctx, config);
-        Chart.register(transparentBackgroundPlugin);
-
-        function getNearestPoint(chartInstance, mouseX, mouseY) {
-            let nearestPoint = null;
-            let nearestDistance = Infinity;
-            const hitRadius = 15;
-
-            chartInstance.data.datasets.forEach((dataset, datasetIndex) => {
-                const meta = chartInstance.getDatasetMeta(datasetIndex);
-                meta.data.forEach((point, index) => {
-                    const dx = point.x - mouseX;
-                    const dy = point.y - mouseY;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < hitRadius && distance < nearestDistance) {
-                        nearestDistance = distance;
-                        nearestPoint = { datasetIndex, index, point };
-                    }
-                });
-            });
-            return nearestPoint;
-        }
-
-        function showPointTooltip(event, datasetIndex, pointIndex) {
-            const dataset = config.data.datasets[datasetIndex];
-            const label = dataset.label;
-            const value = dataset.data[pointIndex];
-            const description = dataset.descriptions[pointIndex];
-            const labelText = config.data.labels[pointIndex];
-            const capability = Array.isArray(labelText) ? labelText.join(' ') : labelText;
-
-            const tooltip = document.getElementById('tooltip');
-            tooltip.innerHTML = `
-                <div class="tooltip-title">${capability}</div>
-                <div class="tooltip-score ${datasetIndex === 0 ? 'grafana' : 'tracer'}">${label}: ${value}/5</div>
-                <div class="tooltip-content">${description}</div>
-            `;
-            tooltip.style.left = (event.clientX + 15) + 'px';
-            tooltip.style.top = (event.clientY + 15) + 'px';
-            tooltip.classList.add('show');
-        }
-
-        let currentHoveredPoint = null;
-        const defaultPointRadius = [4, 4, 4, 4, 4, 4, 4, 4, 4];
-        const defaultPointBorderWidth = [2, 2, 2, 2, 2, 2, 2, 2, 2];
-
-        function applyPointHover(datasetIndex, pointIndex) {
-            const hoverRadius = [...defaultPointRadius];
-            const hoverBorderWidth = [...defaultPointBorderWidth];
-            const hoverBgColor = chart.data.datasets[datasetIndex].data.map(() =>
-                datasetIndex === 0 ? '#F46800' : '#27BF9F'
-            );
-            const hoverBorderColor = chart.data.datasets[datasetIndex].data.map(() => '#fff');
-
-            hoverRadius[pointIndex] = 14;
-            hoverBorderWidth[pointIndex] = 4;
-            hoverBgColor[pointIndex] = '#fff';
-            hoverBorderColor[pointIndex] = datasetIndex === 0 ? '#F46800' : '#27BF9F';
-
-            chart.data.datasets[datasetIndex].pointRadius = hoverRadius;
-            chart.data.datasets[datasetIndex].pointBorderWidth = hoverBorderWidth;
-            chart.data.datasets[datasetIndex].pointBackgroundColor = hoverBgColor;
-            chart.data.datasets[datasetIndex].pointBorderColor = hoverBorderColor;
-        }
-
-        function resetPointHover() {
-            chart.data.datasets.forEach((dataset, datasetIndex) => {
-                dataset.pointRadius = [...defaultPointRadius];
-                dataset.pointBorderWidth = [...defaultPointBorderWidth];
-                dataset.pointBackgroundColor = datasetIndex === 0 ? '#F46800' : '#27BF9F';
-                dataset.pointBorderColor = '#fff';
-            });
-        }
-
-        let currentHighlightedDataset = -1;
-        canvasEl.addEventListener('mousemove', (e) => {
-            const rect = canvasEl.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-
-            const nearestPoint = getNearestPoint(chart, mouseX, mouseY);
-            let datasetToHighlight = -1;
-
-            if (nearestPoint) {
-                const pointKey = `${nearestPoint.datasetIndex}-${nearestPoint.index}`;
-                if (currentHoveredPoint !== pointKey) {
-                    resetPointHover();
-                    applyPointHover(nearestPoint.datasetIndex, nearestPoint.index);
-                    currentHoveredPoint = pointKey;
-                    chart.update('none');
-                }
-                showPointTooltip(e, nearestPoint.datasetIndex, nearestPoint.index);
-                datasetToHighlight = nearestPoint.datasetIndex;
-            } else {
-                if (currentHoveredPoint !== null) {
-                    resetPointHover();
-                    currentHoveredPoint = null;
-                    chart.update('none');
-                }
-                document.getElementById('tooltip').classList.remove('show');
-                datasetToHighlight = getHoveredDataset(chart, mouseX, mouseY);
-            }
-
-            if (datasetToHighlight !== -1) {
-                if (datasetToHighlight !== currentHighlightedDataset) {
-                    currentHighlightedDataset = datasetToHighlight;
-                    highlightDataset(chart, datasetToHighlight);
-                }
-            } else {
-                if (currentHighlightedDataset !== -1) {
-                    currentHighlightedDataset = -1;
-                    resetHighlight(chart);
+                    intersect: false,
+                    mode: 'nearest'
                 }
             }
         });
 
-        canvasEl.addEventListener('mouseleave', () => {
-            currentHighlightedDataset = -1;
-            currentHoveredPoint = null;
-            resetPointHover();
-            resetHighlight(chart);
-            const tooltipEl = document.getElementById('tooltip');
-            tooltipEl.classList.remove('show');
+        const tooltip = document.getElementById('tooltip');
+        const tooltipTitle = tooltip.querySelector('.tooltip-title');
+        const tooltipContent = tooltip.querySelector('.tooltip-content');
+        const canvas = document.getElementById('radarChart');
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const angle = Math.atan2(y - centerY, x - centerX);
+            const normalizedAngle = (angle + Math.PI / 2 + 2 * Math.PI) % (2 * Math.PI);
+            
+            const labels = chart.data.labels;
+            const segmentAngle = (2 * Math.PI) / labels.length;
+            const labelIndex = Math.floor((normalizedAngle + segmentAngle / 2) % (2 * Math.PI) / segmentAngle);
+            
+            const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+            const maxRadius = Math.min(centerX, centerY) * 0.75;
+            
+            if (distance < maxRadius * 1.4 && distance > 20) {
+                const label = labels[labelIndex];
+                const description = axisDescriptions[label];
+                
+                tooltipTitle.textContent = label;
+                tooltipContent.textContent = description;
+                tooltip.classList.add('show');
+                
+                let tooltipX = e.clientX + 15;
+                let tooltipY = e.clientY + 15;
+                
+                if (tooltipX + 300 > window.innerWidth) {
+                    tooltipX = e.clientX - 315;
+                }
+                if (tooltipY + 100 > window.innerHeight) {
+                    tooltipY = e.clientY - 100;
+                }
+                
+                tooltip.style.left = tooltipX + 'px';
+                tooltip.style.top = tooltipY + 'px';
+            } else {
+                tooltip.classList.remove('show');
+            }
         });
 
-        const legendItems = document.querySelectorAll('.legend-item');
-        legendItems.forEach((item, index) => {
-            item.style.cursor = 'pointer';
-            item.addEventListener('mouseenter', () => {
-                highlightDataset(chart, index);
-            });
-            item.addEventListener('mouseleave', () => {
-                resetHighlight(chart);
-            });
+        canvas.addEventListener('mouseleave', () => {
+            tooltip.classList.remove('show');
         });
     </script>
 </body>
