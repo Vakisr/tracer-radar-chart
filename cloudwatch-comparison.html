@@ -4,126 +4,130 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cloud-reported metrics vs host-observed execution</title>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Chakra Petch', ui-sans-serif, system-ui, -apple-system, sans-serif;
-      background: transparent;
-      color: #1F2937;
-      line-height: 1.5;
-      padding: 16px;
+      font-family: 'Chakra Petch', ui-sans-serif, system-ui, sans-serif;
+      background: #0f1117;
+      color: #e5e7eb;
+      line-height: 1.6;
+      padding: 24px 16px;
     }
-    main { max-width: 960px; margin: 0 auto; }
+    main { max-width: 900px; margin: 0 auto; }
+    .instance-header {
+      font-family: 'Fira Code', monospace;
+      font-size: 15px;
+      color: #e5e7eb;
+      margin-bottom: 16px;
+    }
+    .instance-header .cost { color: #f472b6; }
     .columns {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 24px;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 700px) {
       .columns { grid-template-columns: 1fr; }
-      .connector { order: -1; margin-bottom: 16px; }
     }
     .card {
       background: transparent;
-      border: 1px solid #E5E7EB;
-      border-radius: 14px;
-      padding: 24px;
-    }
-    .card-header { font-size: 18px; font-weight: 600; color: #111827; margin-bottom: 8px; }
-    .card-desc { font-size: 14px; color: #6B7280; margin-bottom: 16px; }
-    .info-block {
-      background: transparent;
-      border: 1px solid #E5E7EB;
+      border: 1px solid #374151;
       border-radius: 8px;
-      padding: 12px 14px;
-      margin-bottom: 8px;
+      padding: 20px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
     }
-    .info-block:last-child { margin-bottom: 0; }
-    .info-label {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #6B7280;
-      background: #E5E7EB;
-      padding: 2px 6px;
-      border-radius: 4px;
+    .card-title {
+      color: #e5e7eb;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #374151;
+    }
+    .metric-row {
       margin-bottom: 6px;
-    }
-    .info-text { font-size: 14px; color: #374151; }
-    .connector {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      grid-column: 1 / -1;
+      gap: 6px;
     }
-    .connector-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: transparent;
-      border: 1px solid #BFDBFE;
-      border-radius: 8px;
-      padding: 12px 20px;
-      max-width: 600px;
+    .label { color: #9ca3af; }
+    .keyword { color: #22d3ee; }
+    .value { color: #f472b6; }
+    .text { color: #e5e7eb; }
+    .boundary {
+      border-left: 2px solid #374151;
+      padding-left: 16px;
+      margin-top: 16px;
     }
-    .connector-arrow {
-      width: 24px;
-      height: 2px;
-      background: #3B82F6;
-      position: relative;
-      flex-shrink: 0;
+    .boundary-title {
+      color: #9ca3af;
+      font-size: 13px;
+      margin-bottom: 12px;
     }
-    .connector-arrow::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: -4px;
-      border: 5px solid transparent;
-      border-left: 6px solid #3B82F6;
+    .container-block {
+      margin-bottom: 12px;
+      padding-left: 12px;
+      border-left: 1px solid #4b5563;
     }
-    .connector-text { font-size: 14px; color: #1E40AF; }
+    .container-header {
+      margin-bottom: 4px;
+    }
+    .container-detail {
+      padding-left: 12px;
+      color: #9ca3af;
+    }
+    .container-detail::before {
+      content: "• ";
+      color: #4b5563;
+    }
     .takeaway {
       background: transparent;
-      border: 1px solid #E5E7EB;
-      border-radius: 10px;
+      border: 1px solid #374151;
+      border-radius: 8px;
       padding: 16px 20px;
       text-align: center;
+      font-size: 14px;
+      color: #9ca3af;
+      margin-top: 8px;
     }
-    .takeaway-text { font-size: 14px; color: #374151; }
   </style>
 </head>
 <body>
-  <main aria-label="Comparison diagram: AWS CloudWatch vs Tracer">
+  <main>
+    <div class="instance-header">EC2 Instance: <span class="cost">$24.00</span> / hour</div>
     <div class="columns">
-      <section class="card" aria-labelledby="cloudwatch-heading">
-        <h2 id="cloudwatch-heading" class="card-header">AWS CloudWatch</h2>
-        <p class="card-desc">Cloud-reported metrics, logs, and alarms across AWS services.</p>
-        <div class="info-block"><span class="info-label">Scope</span><div class="info-text">Account / region / service</div></div>
-        <div class="info-block"><span class="info-label">Typical signals</span><div class="info-text">Instance/service CPU, memory, network, logs</div></div>
-        <div class="info-block"><span class="info-label">Cost</span><div class="info-text">High-level (service, account), not per task/process</div></div>
+      <section class="card">
+        <div class="card-title">CloudWatch</div>
+        <div class="metric-row"><span class="label">Total</span> <span class="keyword">cost:</span> <span class="value">$24.00</span></div>
+        <div class="metric-row"><span class="label">CPU avg:</span> <span class="value">68%</span></div>
+        <div class="metric-row"><span class="label">Memory avg:</span> <span class="value">61%</span></div>
       </section>
-      <section class="card" aria-labelledby="tracer-heading">
-        <h2 id="tracer-heading" class="card-header">Tracer (host-observed)</h2>
-        <p class="card-desc">Execution-level signals from the host and container runtime.</p>
-        <div class="info-block"><span class="info-label">Scope</span><div class="info-text">Run → task → container → process</div></div>
-        <div class="info-block"><span class="info-label">Signals</span><div class="info-text">CPU, memory, disk I/O, network, stalls, failures</div></div>
-        <div class="info-block"><span class="info-label">Attribution</span><div class="info-text">By user, container, task, run</div></div>
-        <div class="info-block"><span class="info-label">Infra state (Tracer/sweep)</span><div class="info-text">Idle and orphaned resources</div></div>
-      </section>
-      <div class="connector" role="presentation">
-        <div class="connector-content">
-          <span class="connector-arrow" aria-hidden="true"></span>
-          <span class="connector-text">CloudWatch stays responsible for AWS service metrics. Tracer adds host-observed context.</span>
+      <section class="card">
+        <div class="card-title">Tracer (host-observed)</div>
+        <div class="boundary">
+          <div class="boundary-title">Attribution boundary</div>
+          <div class="container-block">
+            <div class="container-header"><span class="text">Container A</span> (<span class="keyword">User</span> <span class="text">Alice</span>)</div>
+            <div class="container-detail">Pipeline run <span class="value">#184</span></div>
+            <div class="container-detail"><span class="keyword">Cost:</span> <span class="value">$4.10</span></div>
+          </div>
+          <div class="container-block">
+            <div class="container-header"><span class="text">Container B</span> (<span class="keyword">User</span> <span class="text">Bob</span>)</div>
+            <div class="container-detail">Variant calling step</div>
+            <div class="container-detail"><span class="keyword">Cost:</span> <span class="value">$17.60</span></div>
+          </div>
+          <div class="container-block">
+            <div class="container-header"><span class="text">Idle / orphaned capacity</span></div>
+            <div class="container-detail">No active workload</div>
+            <div class="container-detail"><span class="keyword">Cost:</span> <span class="value">$2.30</span></div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
-    <footer class="takeaway" aria-label="Key takeaway">
-      <p class="takeaway-text">Use CloudWatch to track service health. Use Tracer to explain workload behavior and map resource use and cost to execution units.</p>
+    <footer class="takeaway">
+      CloudWatch reports instance-level metrics. Tracer attributes cost and usage to containers, tasks, users, and runs.
     </footer>
   </main>
 </body>
