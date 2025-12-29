@@ -118,7 +118,7 @@
             font-weight: 500;
             margin-bottom: 4px;
         }
-        .prometheus { color: #E6522C; }
+        .prometheus { color: #3b82f6; }
         .tracer { color: #27BF9F; }
         @media (prefers-color-scheme: dark) {
             .tooltip-title {
@@ -141,7 +141,7 @@
         <canvas id="radarChart"></canvas>
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-color" style="background: #E6522C;"></div>
+                <div class="legend-color" style="background: #3b82f6;"></div>
                 <span>Prometheus (metric collection)</span>
             </div>
             <div class="legend-item">
@@ -167,17 +167,17 @@
                 {
                     label: 'Prometheus (metric collection)',
                     data: [1, 1, 1, 0, 2, 5],
-                    borderColor: '#E6522C',
-                    backgroundColor: 'rgba(230, 82, 44, 0.15)',
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.15)',
                     fill: true,
                     borderWidth: 2.5,
-                    pointBackgroundColor: '#E6522C',
+                    pointBackgroundColor: '#3b82f6',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 4,
                     pointHoverRadius: 6,
                     pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#E6522C',
+                    pointHoverBorderColor: '#3b82f6',
                     pointHoverBorderWidth: 3,
                     descriptions: [
                         'No inherent awareness of execution context; relies on labels added by exporters',
@@ -298,15 +298,15 @@
         function highlightDataset(chartInstance, datasetIndex) {
             chartInstance.data.datasets.forEach((dataset, i) => {
                 if (i === datasetIndex) {
-                    dataset.borderColor = i === 0 ? '#E6522C' : '#27BF9F';
-                    dataset.backgroundColor = i === 0 ? 'rgba(230, 82, 44, 0.25)' : 'rgba(39, 191, 159, 0.25)';
-                    dataset.pointBackgroundColor = i === 0 ? '#E6522C' : '#27BF9F';
+                    dataset.borderColor = i === 0 ? '#3b82f6' : '#27BF9F';
+                    dataset.backgroundColor = i === 0 ? 'rgba(59, 130, 246, 0.25)' : 'rgba(39, 191, 159, 0.25)';
+                    dataset.pointBackgroundColor = i === 0 ? '#3b82f6' : '#27BF9F';
                     dataset.pointBorderColor = '#fff';
                     dataset.borderWidth = 3.5;
                 } else {
-                    dataset.borderColor = i === 0 ? 'rgba(230, 82, 44, 0.2)' : 'rgba(39, 191, 159, 0.2)';
-                    dataset.backgroundColor = i === 0 ? 'rgba(230, 82, 44, 0.05)' : 'rgba(39, 191, 159, 0.05)';
-                    dataset.pointBackgroundColor = i === 0 ? 'rgba(230, 82, 44, 0.2)' : 'rgba(39, 191, 159, 0.2)';
+                    dataset.borderColor = i === 0 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(39, 191, 159, 0.2)';
+                    dataset.backgroundColor = i === 0 ? 'rgba(59, 130, 246, 0.05)' : 'rgba(39, 191, 159, 0.05)';
+                    dataset.pointBackgroundColor = i === 0 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(39, 191, 159, 0.2)';
                     dataset.pointBorderColor = i === 0 ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.2)';
                     dataset.borderWidth = 2;
                 }
@@ -315,9 +315,9 @@
         }
 
         function resetHighlight(chartInstance) {
-            chartInstance.data.datasets[0].borderColor = '#E6522C';
-            chartInstance.data.datasets[0].backgroundColor = 'rgba(230, 82, 44, 0.15)';
-            chartInstance.data.datasets[0].pointBackgroundColor = '#E6522C';
+            chartInstance.data.datasets[0].borderColor = '#3b82f6';
+            chartInstance.data.datasets[0].backgroundColor = 'rgba(59, 130, 246, 0.15)';
+            chartInstance.data.datasets[0].pointBackgroundColor = '#3b82f6';
             chartInstance.data.datasets[0].pointBorderColor = '#fff';
             chartInstance.data.datasets[0].borderWidth = 2.5;
 
@@ -394,14 +394,14 @@
             const hoverRadius = [...defaultPointRadius];
             const hoverBorderWidth = [...defaultPointBorderWidth];
             const hoverBgColor = chart.data.datasets[datasetIndex].data.map(() =>
-                datasetIndex === 0 ? '#E6522C' : '#27BF9F'
+                datasetIndex === 0 ? '#3b82f6' : '#27BF9F'
             );
             const hoverBorderColor = chart.data.datasets[datasetIndex].data.map(() => '#fff');
 
             hoverRadius[pointIndex] = 14;
             hoverBorderWidth[pointIndex] = 4;
             hoverBgColor[pointIndex] = '#fff';
-            hoverBorderColor[pointIndex] = datasetIndex === 0 ? '#E6522C' : '#27BF9F';
+            hoverBorderColor[pointIndex] = datasetIndex === 0 ? '#3b82f6' : '#27BF9F';
 
             chart.data.datasets[datasetIndex].pointRadius = hoverRadius;
             chart.data.datasets[datasetIndex].pointBorderWidth = hoverBorderWidth;
@@ -413,7 +413,7 @@
             chart.data.datasets.forEach((dataset, datasetIndex) => {
                 dataset.pointRadius = [...defaultPointRadius];
                 dataset.pointBorderWidth = [...defaultPointBorderWidth];
-                dataset.pointBackgroundColor = datasetIndex === 0 ? '#E6522C' : '#27BF9F';
+                dataset.pointBackgroundColor = datasetIndex === 0 ? '#3b82f6' : '#27BF9F';
                 dataset.pointBorderColor = '#fff';
             });
         }
