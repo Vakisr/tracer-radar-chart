@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS CloudWatch + Tracer - Pipeline Intelligence</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --purple: #7C3AED;
+            --purple-light: #A78BFA;
+            --teal: #3B82F6;
+            --teal-light: #60A5FA;
+            --green: #10B981;
+            --green-light: #34D399;
+            --red: #EF4444;
+            --red-light: #FCA5A5;
+            --gray: #6B7280;
+            --gray-light: #9CA3AF;
+            --white: #FFFFFF;
+            --black: #0A0A0A;
+        }
+        
+        body {
+            font-family: "Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            background: #101010;
+            color: #E5E5E5;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .container { max-width: 100%; margin: 0 auto; padding: 0; }
+        
+        .flow { display: flex; flex-direction: column; gap: 0; }
+        
+        .step { width: 100%; }
+        
+        .step-card {
+            border-radius: 0.125rem;
+            padding: 24px 28px;
+            position: relative;
+            background: #101010;
+        }
+        
+        .step-badge {
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            background: #101010;
+            padding: 4px 14px;
+            border-radius: 0.125rem;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .step-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 400;
+            font-size: 1rem;
+        }
+        
+        .step-tag {
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+        }
+        
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 400;
+        }
+        
+        .step-content { font-family: "Chakra Petch", sans-serif;
+            font-family: "Chakra Petch", sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .connector {
+            display: flex;
+            justify-content: center;
+            padding: 0; position: relative; height: 40px;
+        }
+        
+        /* Border pulse animation system - Seamless flow */ .step-card, .gap-card { position: relative; overflow: visible; } .border-pulse { position: absolute; pointer-events: none; } .border-pulse.top { top: -1px; left: 50%; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-top 10s linear infinite; } .border-pulse.left { top: 0; left: -1px; width: 2px; height: 0; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-left 10s linear infinite; } .border-pulse.right { top: 0; right: -1px; width: 2px; height: 0; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-right 10s linear infinite; } .border-pulse.bottom-left { bottom: -1px; left: -1px; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-bottom-left 10s linear infinite; } .border-pulse.bottom-right { bottom: -1px; right: -1px; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-bottom-right 10s linear infinite; } @keyframes pulse-top { 0% { width: 0; left: 50%; opacity: 1; } 4% { width: 100%; left: 0; opacity: 1; } 5% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-left { 0%, 4% { height: 0; top: 0; opacity: 0; } 5% { height: 0; opacity: 1; } 14% { height: 100%; opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-right { 0%, 4% { height: 0; top: 0; opacity: 0; } 5% { height: 0; opacity: 1; } 14% { height: 100%; opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-bottom-left { 0%, 14% { width: 0; opacity: 0; } 15% { width: 0; opacity: 1; } 20% { width: 51%; opacity: 1; } 21% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-bottom-right { 0%, 14% { width: 0; opacity: 0; } 15% { width: 0; opacity: 1; } 20% { width: 51%; opacity: 1; } 21% { opacity: 0; } 100% { opacity: 0; } } .step.s1 .border-pulse { animation-delay: 0s; } .step.s2 .border-pulse { animation-delay: 2.6s; } .step.s3 .border-pulse { animation-delay: 5.2s; } .step.s4 .border-pulse { animation: none; } .step-card.fix { animation: border-flash 10s ease-in-out infinite; animation-delay: 7.8s; } .connector-line { width: 2px; height: 100%; background: rgba(107, 114, 128, 0.4); position: relative; overflow: hidden; } .connector-pulse { position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-connector 10s linear infinite; } @keyframes pulse-connector { 0% { top: -20px; opacity: 1; } 6% { top: 100%; opacity: 1; } 7% { opacity: 0; } 100% { opacity: 0; } } .connector.c1 .connector-pulse { animation-delay: 2s; } .connector.c2 .connector-pulse { animation-delay: 4.6s; } .connector.c3 .connector-pulse { animation-delay: 7.2s; } @keyframes border-flash { 0% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 2% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); } 10% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 12% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); } 20% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 100% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } }
+        
+        /* Intent - Purple */
+        .step-card.intent { border: 1px solid rgba(107, 114, 128, 0.35); }
+        .step-card.intent .step-badge { color: #FFFFFF; }
+        .step-card.intent .step-icon { background: var(--purple); color: var(--white); }
+        .step-card.intent .step-tag { color: var(--purple); }
+        .step-card.intent .step-title { color: var(--purple-light); }
+        .step-card.intent .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
+        .arrow.purple svg { stroke: var(--purple); }
+        
+        /* Gap - Red */
+        .gap-card {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(107, 114, 128, 0.35);
+            border-radius: 0.125rem;
+            padding: 20px 28px;
+            text-align: center;
+        }
+        
+        .gap-badge {
+            display: inline-block;
+            background: #101010;
+            padding: 4px 14px;
+            border-radius: 0.125rem;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--red);
+            margin-bottom: 10px;
+        }
+        
+        .gap-stat {
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--red);
+            margin-bottom: 6px;
+        }
+        
+        .gap-text {
+            font-size: 1.05rem;
+            color: var(--red-light);
+        }
+        .arrow.red svg { stroke: var(--red); }
+        
+        /* Execution - Gray */
+        .step-card.execution { border: 1px solid rgba(107, 114, 128, 0.35); }
+        .step-card.execution .step-badge { color: #FFFFFF; }
+        .step-card.execution .step-icon { background: var(--gray); color: var(--white); }
+        .step-card.execution .step-tag { color: var(--gray); }
+        .step-card.execution .step-title { color: var(--gray-light); }
+        .step-card.execution .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
+        .arrow.gray svg { stroke: var(--gray); }
+        
+        /* Reality - Teal */
+        .step-card.reality { border: 1px solid rgba(107, 114, 128, 0.35); border-radius: 0.125rem; }
+        .step-card.reality .step-badge { color: #FFFFFF; }
+        .step-card.reality .step-icon { background: var(--teal); color: var(--white); }
+        .step-card.reality .step-tag { color: #FFFFFF; }
+        .step-card.reality .step-title { color: #FFFFFF; }
+        
+        .pipeline-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #FB68E1, #953E96);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            color: #FFFFFF;
+            font-family: "Chakra Petch", sans-serif;
+        }
+        
+        .util-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+            font-size: 1.05rem;
+        }
+        
+        .util-label { color: #D1D5DB; width: 70px; font-family: "Chakra Petch", sans-serif; }
+        
+        .util-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .util-fill { height: 100%; border-radius: 4px; }
+        .util-fill.low { background: #FFFFFF; }
+        .util-fill.high { background: var(--red); }
+        
+        .util-value {
+            width: 50px;
+            text-align: right;
+            font-family: "Chakra Petch", sans-serif;
+            font-weight: 600;
+        }
+        .util-value.low { color: #D1D5DB; }
+        .util-value.high { color: var(--red); }
+        
+        .diagnosis {
+            margin-top: 14px;
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid var(--red);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            color: var(--red-light);
+        }
+        .diagnosis { border-color: #38BDA4; background: rgba(56, 189, 164, 0.2); color: #FFFFFF; } .diagnosis strong { color: #FFFFFF; } .gap-diagnosis { border-color: #EF4444; background: rgba(239, 68, 68, 0.3); color: #FFFFFF; } .gap-diagnosis strong { color: #FFFFFF; }
+        
+        .arrow.teal svg { stroke: var(--teal); }
+        
+        /* Tracer Logo */
+        .tracer-logo {
+            font-size: 1.6rem;
+            font-weight: 400;
+            font-family: "Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        }
+        .tracer-text {
+            background: linear-gradient(135deg, #FCFCFC, #C4C4C4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tracer-text-old {
+            color: #FFFFFF;
+        }
+        .tune-text {
+            background: linear-gradient(135deg, #38BDA4, #76E9D3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .collect-text {
+            background: linear-gradient(135deg, #FB68E1, #953E96);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Fix - Green */
+        .step-card.fix { border: 1px solid rgba(107, 114, 128, 0.35); border-radius: 0.125rem; }
+        .step-card.fix .step-badge { color: #FFFFFF; }
+        .step-card.fix .step-icon { background: var(--green); color: var(--black); }
+        .step-card.fix .step-tag { color: var(--green); }
+        .step-card.fix .step-title { color: var(--green); }
+        .step-card.fix .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
+        
+        .savings {
+            margin-top: 14px;
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #FFFFFF;
+        }
+        
+        @media (max-width: 600px) {
+            .step-card { padding: 20px; }
+            .step-title { font-size: 1.25rem; }
+            .gap-stat { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="flow">
+            
+            <!-- 1. Intent - AWS CloudWatch -->
+            <div class="step s1">
+                <div class="step-card intent"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
+                    <div class="step-badge">1. Intent</div>
+                    <div class="step-header">
+                        
+                        <div class="step-titles">
+                            
+                            <div class="step-title">AWS CloudWatch</div>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        Pipeline: rnaseq_analysis<br>
+                        vCPU: 64<br>
+                        Memory: 488 GB
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connector c1">
+                <div class="connector-line"><div class="connector-pulse"></div></div>
+                    
+                
+            </div>
+            
+            
+            <!-- 2. Execution - Kernel -->
+            <div class="step s2">
+                <div class="step-card execution"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
+                    <div class="step-badge">2. Execution</div>
+                    <div class="step-header">
+                        
+                        <div class="step-titles">
+                            
+                            <div class="step-title">Kernel / Hardware</div>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        Instance: r5.16xlarge<br>
+                        vCPU: 64<br>
+                        Memory: 488 GB<br>
+                        Job #4521 running...<br>
+                        Task: STAR<br>
+                        Duration: 47 min
+                    </div>
+                    <div class="diagnosis gap-diagnosis"><strong>The gap:</strong> 92% CPU idle, 82% RAM idle, you are paying for compute you don't use.</div>
+                </div>
+            </div>
+            
+            <div class="connector c2">
+                <div class="connector-line"><div class="connector-pulse"></div></div>
+                    
+                
+            </div>
+            
+            <!-- 3. Reality - Tracer -->
+            <div class="step s3">
+                <div class="step-card reality"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
+                    <div class="step-badge">3. Reality</div>
+                    <div class="step-header">
+                        
+                        <div class="step-titles">
+                            
+                            <span class="tracer-logo"><span class="tracer-text">Tracer/</span><span class="collect-text">collect</span></span>
+                        </div>
+                    </div>
+                    <div class="pipeline-tag">
+                        Pipeline: rnaseq_analysis → STAR → Job #4521
+                    </div>
+                    <div class="util-row">
+                        <span class="util-label">CPU</span>
+                        <div class="util-bar"><div class="util-fill low" style="width: 8%"></div></div>
+                        <span class="util-value low">8%</span>
+                    </div>
+                    <div class="util-row">
+                        <span class="util-label">Memory</span>
+                        <div class="util-bar"><div class="util-fill low" style="width: 18%"></div></div>
+                        <span class="util-value low">18%</span>
+                    </div>
+                    <div class="util-row">
+                        <span class="util-label">Disk I/O</span>
+                        <div class="util-bar"><div class="util-fill high" style="width: 100%"></div></div>
+                        <span class="util-value high">114%</span>
+                    </div>
+                    <div class="diagnosis">
+                        <strong>Diagnosis:</strong> I/O bound. Adding CPU/RAM won't help.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connector c3">
+                <div class="connector-line"><div class="connector-pulse"></div></div>
+                    
+                
+            </div>
+            
+            <!-- 4. The Fix -->
+            <div class="step s4">
+                <div class="step-card fix"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
+                    <div class="step-badge">4. The Fix</div>
+                    <div class="step-header">
+                        
+                        <div class="step-titles">
+                            <span class="tracer-logo"><span class="tracer-text">Tracer/</span><span class="tune-text">tune</span></span>
+                            
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        Instance: r6id.2xlarge<br>
+                        vCPU: 8<br>
+                        Memory: 64 GB<br>
+                        Storage: NVMe SSD
+                    </div>
+                    <div class="savings">→ Save ~85% on compute costs and improve runtime by 3.7x</div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
