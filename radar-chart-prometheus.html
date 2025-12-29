@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en" style="background: transparent;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Prometheus vs Tracer+Prometheus Radar Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            background: #FBFBFB;
+        }
+        body {
+            font-family: "Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            background: #FBFBFB;
+            padding: 10px;
+            margin: 0;
+            overflow: hidden;
+        }
+        @media (prefers-color-scheme: dark) {
+            html {
+                background: #101010;
+            }
+            body {
+                background: #101010;
+            }
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px 30px;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+            background: transparent !important;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .legend-item:hover {
+            background: rgba(0, 0, 0, 0.04);
+            transform: translateY(-1px);
+        }
+        @media (prefers-color-scheme: dark) {
+            .legend {
+                color: #ffffff;
+            }
+            .legend-item {
+                background: rgba(255, 255, 255, 0.05);
+            }
+            .legend-item:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+        }
+        .legend-color {
+            width: 24px;
+            height: 4px;
+            border-radius: 2px;
+        }
+        .tooltip {
+            position: absolute;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.125rem;
+            padding: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            max-width: 300px;
+            z-index: 1000;
+            color: #374151;
+        }
+        .tooltip.show {
+            opacity: 1;
+        }
+        @media (prefers-color-scheme: dark) {
+            .tooltip {
+                background: #0a0a0a;
+                border-color: #262626;
+                color: #ffffff;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            }
+        }
+        .tooltip-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+        .tooltip-content {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        .tooltip-score {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .prometheus { color: #E6522C; }
+        .tracer { color: #27BF9F; }
+        @media (prefers-color-scheme: dark) {
+            .tooltip-title {
+                color: #ffffff;
+            }
+            .tooltip-content {
+                color: #d1d5db;
+            }
+        }
+        .hint {
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="radarChart"></canvas>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #E6522C;"></div>
+                <span>Prometheus (metric collection)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #27BF9F;"></div>
+                <span>Prometheus + Tracer (execution visibility)</span>
+            </div>
+        </div>
+        <div class="hint">Hover over the chart to see detailed descriptions</div>
+    </div>
+    <div id="tooltip" class="tooltip"></div>
+
+    <script>
+        const data = {
+            labels: [
+                ['Execution', 'Context', 'Awareness'],
+                ['Short-lived', 'Process', 'Visibility'],
+                ['Pipeline/Run', 'Attribution'],
+                ['Cost', 'Attribution', 'Granularity'],
+                ['Host-observed', 'Behavior'],
+                ['Long-term', 'Metric', 'Retention']
+            ],
+            datasets: [
+                {
+                    label: 'Prometheus (metric collection)',
+                    data: [1, 1, 1, 0, 2, 5],
+                    borderColor: '#E6522C',
+                    backgroundColor: 'rgba(230, 82, 44, 0.15)',
+                    fill: true,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#E6522C',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#E6522C',
+                    pointHoverBorderWidth: 3,
+                    descriptions: [
+                        'No inherent awareness of execution context; relies on labels added by exporters',
+                        'Scrape intervals may miss short-lived processes that complete between scrapes',
+                        'No built-in pipeline or run attribution; requires custom labels and queries',
+                        'No built-in cost tracking; requires external tools or manual aggregation',
+                        'Collects reported metrics; does not observe host behavior directly',
+                        'Strong time-series storage with configurable retention and federation'
+                    ]
+                },
+                {
+                    label: 'Prometheus + Tracer (execution)',
+                    data: [5, 5, 5, 5, 5, 5],
+                    borderColor: '#27BF9F',
+                    backgroundColor: 'rgba(39, 191, 159, 0.15)',
+                    fill: true,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#27BF9F',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#27BF9F',
+                    pointHoverBorderWidth: 3,
+                    descriptions: [
+                        'Full execution context: pipelines, runs, tasks, and tools automatically linked',
+                        'Captures all processes including short-lived jobs and containers',
+                        'Built-in attribution to pipelines, runs, and individual tasks',
+                        'Cost attribution to execution units: runs, tasks, tools, and teams',
+                        'Observes CPU, memory, I/O, network directly from host and container runtime',
+                        'Prometheus retention plus Tracer execution-level data organized by pipeline'
+                    ]
+                }
+            ]
+        };
+
+        const config = {
+            type: 'radar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 5,
+                        min: 0,
+                        ticks: {
+                            stepSize: 1,
+                            display: false
+                        },
+                        grid: {
+                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+                            circular: true
+                        },
+                        angleLines: {
+                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 12,
+                                weight: 500
+                            },
+                            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ffffff' : '#374151',
+                            padding: 35
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                interaction: {
+                    mode: 'point',
+                    intersect: false
+                }
+            }
+        };
+
+        function isPointInPolygon(x, y, polygon) {
+            let inside = false;
+            for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+                const xi = polygon[i].x, yi = polygon[i].y;
+                const xj = polygon[j].x, yj = polygon[j].y;
+                if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
+                    inside = !inside;
+                }
+            }
+            return inside;
+        }
+
+        function getDatasetPolygon(chartInstance, datasetIndex) {
+            const meta = chartInstance.getDatasetMeta(datasetIndex);
+            const points = [];
+            meta.data.forEach(point => {
+                points.push({ x: point.x, y: point.y });
+            });
+            return points;
+        }
+
+        function getHoveredDataset(chartInstance, mouseX, mouseY) {
+            const polygon0 = getDatasetPolygon(chartInstance, 0);
+            if (isPointInPolygon(mouseX, mouseY, polygon0)) {
+                return 0;
+            }
+            const polygon1 = getDatasetPolygon(chartInstance, 1);
+            if (isPointInPolygon(mouseX, mouseY, polygon1)) {
+                return 1;
+            }
+            return -1;
+        }
+
+        function highlightDataset(chartInstance, datasetIndex) {
+            chartInstance.data.datasets.forEach((dataset, i) => {
+                if (i === datasetIndex) {
+                    dataset.borderColor = i === 0 ? '#E6522C' : '#27BF9F';
+                    dataset.backgroundColor = i === 0 ? 'rgba(230, 82, 44, 0.25)' : 'rgba(39, 191, 159, 0.25)';
+                    dataset.pointBackgroundColor = i === 0 ? '#E6522C' : '#27BF9F';
+                    dataset.pointBorderColor = '#fff';
+                    dataset.borderWidth = 3.5;
+                } else {
+                    dataset.borderColor = i === 0 ? 'rgba(230, 82, 44, 0.2)' : 'rgba(39, 191, 159, 0.2)';
+                    dataset.backgroundColor = i === 0 ? 'rgba(230, 82, 44, 0.05)' : 'rgba(39, 191, 159, 0.05)';
+                    dataset.pointBackgroundColor = i === 0 ? 'rgba(230, 82, 44, 0.2)' : 'rgba(39, 191, 159, 0.2)';
+                    dataset.pointBorderColor = i === 0 ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.2)';
+                    dataset.borderWidth = 2;
+                }
+            });
+            chartInstance.update('none');
+        }
+
+        function resetHighlight(chartInstance) {
+            chartInstance.data.datasets[0].borderColor = '#E6522C';
+            chartInstance.data.datasets[0].backgroundColor = 'rgba(230, 82, 44, 0.15)';
+            chartInstance.data.datasets[0].pointBackgroundColor = '#E6522C';
+            chartInstance.data.datasets[0].pointBorderColor = '#fff';
+            chartInstance.data.datasets[0].borderWidth = 2.5;
+
+            chartInstance.data.datasets[1].borderColor = '#27BF9F';
+            chartInstance.data.datasets[1].backgroundColor = 'rgba(39, 191, 159, 0.15)';
+            chartInstance.data.datasets[1].pointBackgroundColor = '#27BF9F';
+            chartInstance.data.datasets[1].pointBorderColor = '#fff';
+            chartInstance.data.datasets[1].borderWidth = 2.5;
+
+            chartInstance.update('none');
+        }
+
+        const transparentBackgroundPlugin = {
+            id: 'transparentBackground',
+            beforeDraw: (chart) => {
+                const ctx = chart.ctx;
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-over';
+                ctx.fillStyle = 'transparent';
+                ctx.fillRect(0, 0, chart.width, chart.height);
+                ctx.restore();
+            }
+        };
+
+        const canvasEl = document.getElementById('radarChart');
+        const ctx = canvasEl.getContext('2d');
+        const chart = new Chart(ctx, config);
+        Chart.register(transparentBackgroundPlugin);
+
+        function getNearestPoint(chartInstance, mouseX, mouseY) {
+            let nearestPoint = null;
+            let nearestDistance = Infinity;
+            const hitRadius = 15;
+
+            chartInstance.data.datasets.forEach((dataset, datasetIndex) => {
+                const meta = chartInstance.getDatasetMeta(datasetIndex);
+                meta.data.forEach((point, index) => {
+                    const dx = point.x - mouseX;
+                    const dy = point.y - mouseY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < hitRadius && distance < nearestDistance) {
+                        nearestDistance = distance;
+                        nearestPoint = { datasetIndex, index, point };
+                    }
+                });
+            });
+            return nearestPoint;
+        }
+
+        function showPointTooltip(event, datasetIndex, pointIndex) {
+            const dataset = config.data.datasets[datasetIndex];
+            const label = dataset.label;
+            const value = dataset.data[pointIndex];
+            const description = dataset.descriptions[pointIndex];
+            const labelText = config.data.labels[pointIndex];
+            const capability = Array.isArray(labelText) ? labelText.join(' ') : labelText;
+
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = `
+                <div class="tooltip-title">${capability}</div>
+                <div class="tooltip-score ${datasetIndex === 0 ? 'prometheus' : 'tracer'}">${label}: ${value}/5</div>
+                <div class="tooltip-content">${description}</div>
+            `;
+            tooltip.style.left = (event.clientX + 15) + 'px';
+            tooltip.style.top = (event.clientY + 15) + 'px';
+            tooltip.classList.add('show');
+        }
+
+        let currentHoveredPoint = null;
+        const defaultPointRadius = [4, 4, 4, 4, 4, 4];
+        const defaultPointBorderWidth = [2, 2, 2, 2, 2, 2];
+
+        function applyPointHover(datasetIndex, pointIndex) {
+            const hoverRadius = [...defaultPointRadius];
+            const hoverBorderWidth = [...defaultPointBorderWidth];
+            const hoverBgColor = chart.data.datasets[datasetIndex].data.map(() =>
+                datasetIndex === 0 ? '#E6522C' : '#27BF9F'
+            );
+            const hoverBorderColor = chart.data.datasets[datasetIndex].data.map(() => '#fff');
+
+            hoverRadius[pointIndex] = 14;
+            hoverBorderWidth[pointIndex] = 4;
+            hoverBgColor[pointIndex] = '#fff';
+            hoverBorderColor[pointIndex] = datasetIndex === 0 ? '#E6522C' : '#27BF9F';
+
+            chart.data.datasets[datasetIndex].pointRadius = hoverRadius;
+            chart.data.datasets[datasetIndex].pointBorderWidth = hoverBorderWidth;
+            chart.data.datasets[datasetIndex].pointBackgroundColor = hoverBgColor;
+            chart.data.datasets[datasetIndex].pointBorderColor = hoverBorderColor;
+        }
+
+        function resetPointHover() {
+            chart.data.datasets.forEach((dataset, datasetIndex) => {
+                dataset.pointRadius = [...defaultPointRadius];
+                dataset.pointBorderWidth = [...defaultPointBorderWidth];
+                dataset.pointBackgroundColor = datasetIndex === 0 ? '#E6522C' : '#27BF9F';
+                dataset.pointBorderColor = '#fff';
+            });
+        }
+
+        let currentHighlightedDataset = -1;
+        canvasEl.addEventListener('mousemove', (e) => {
+            const rect = canvasEl.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const nearestPoint = getNearestPoint(chart, mouseX, mouseY);
+            let datasetToHighlight = -1;
+
+            if (nearestPoint) {
+                const pointKey = `${nearestPoint.datasetIndex}-${nearestPoint.index}`;
+                if (currentHoveredPoint !== pointKey) {
+                    resetPointHover();
+                    applyPointHover(nearestPoint.datasetIndex, nearestPoint.index);
+                    currentHoveredPoint = pointKey;
+                    chart.update('none');
+                }
+                showPointTooltip(e, nearestPoint.datasetIndex, nearestPoint.index);
+                datasetToHighlight = nearestPoint.datasetIndex;
+            } else {
+                if (currentHoveredPoint !== null) {
+                    resetPointHover();
+                    currentHoveredPoint = null;
+                    chart.update('none');
+                }
+                document.getElementById('tooltip').classList.remove('show');
+                datasetToHighlight = getHoveredDataset(chart, mouseX, mouseY);
+            }
+
+            if (datasetToHighlight !== -1) {
+                if (datasetToHighlight !== currentHighlightedDataset) {
+                    currentHighlightedDataset = datasetToHighlight;
+                    highlightDataset(chart, datasetToHighlight);
+                }
+            } else {
+                if (currentHighlightedDataset !== -1) {
+                    currentHighlightedDataset = -1;
+                    resetHighlight(chart);
+                }
+            }
+        });
+
+        canvasEl.addEventListener('mouseleave', () => {
+            currentHighlightedDataset = -1;
+            currentHoveredPoint = null;
+            resetPointHover();
+            resetHighlight(chart);
+            const tooltipEl = document.getElementById('tooltip');
+            tooltipEl.classList.remove('show');
+        });
+
+        const legendItems = document.querySelectorAll('.legend-item');
+        legendItems.forEach((item, index) => {
+            item.style.cursor = 'pointer';
+            item.addEventListener('mouseenter', () => {
+                highlightDataset(chart, index);
+            });
+            item.addEventListener('mouseleave', () => {
+                resetHighlight(chart);
+            });
+        });
+    </script>
+</body>
+</html>
