@@ -285,9 +285,9 @@
                         </div>
                     </div>
                     <div class="step-content">
-                        EC2 Instance: i-0abc123<br>
-                        CPU: 15% avg<br>
-                        Memory: 22% avg
+                        Infrastructure Metrics<br>
+                        EC2 CPU: 15% avg<br>
+                        EC2 Memory: 22% avg<br>Monthly Cost: $4,200
                     </div>
                 </div>
             </div>
@@ -302,23 +302,23 @@
             <!-- 2. Execution - Kernel -->
             <div class="step s2">
                 <div class="step-card execution"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
-                    <div class="step-badge">2. Execution</div>
+                    <div class="step-badge">2. The Gap</div>
                     <div class="step-header">
                         
                         <div class="step-titles">
                             
-                            <div class="step-title">Kernel / Hardware</div>
+                            <div class="step-title">What's Running?</div>
                         </div>
                     </div>
                     <div class="step-content">
-                        Type: r5.16xlarge<br>
-                        CPU: 15% avg<br>
-                        Memory: 22% avg<br>
-                        Batch Job: JOB-4521<br>
-                        Tool: STAR alignment<br>
-                        Runtime: 47 min
+                        Instance: r5.16xlarge<br>
+                        Containers: ?<br>
+                        Pipelines: ?<br>
+                        Tasks: ?<br>
+                        Tools: ?<br>
+                        Cost attribution: ?
                     </div>
-                    <div class="diagnosis gap-diagnosis"><strong>The gap:</strong> CloudWatch shows healthy metrics, but cannot see execution bottlenecks inside containers.</div>
+                    <div class="diagnosis gap-diagnosis"><strong>The gap:</strong> CloudWatch shows infrastructure metrics but cannot attribute cost or usage to pipelines, tasks, or containers.</div>
                 </div>
             </div>
             
@@ -340,7 +340,7 @@
                         </div>
                     </div>
                     <div class="pipeline-tag">
-                        EC2: i-0abc123 → STAR alignment → Process #8472
+                        Pipeline: rnaseq_analysis → Run #142 → STAR
                     </div>
                     <div class="util-row">
                         <span class="util-label">CPU</span>
@@ -358,7 +358,7 @@
                         <span class="util-value high">114%</span>
                     </div>
                     <div class="diagnosis">
-                        <strong>Diagnosis:</strong> I/O bound. Adding CPU/RAM won't help.
+                        <strong>Attribution:</strong> STAR uses 8% CPU, 18% RAM. Cost: $890/month of $4,200 total.
                     </div>
                 </div>
             </div>
@@ -381,12 +381,12 @@
                         </div>
                     </div>
                     <div class="step-content">
-                        Right-size: r6id.2xlarge<br>
-                        vCPU: 8 (from 64)<br>
-                        Memory: 64 GB (from 488)<br>
-                        Storage: NVMe SSD
+                        Optimize by pipeline:<br>
+                        Right-size STAR instances<br>
+                        Terminate idle containers<br>
+                        Attribute cost to teams
                     </div>
-                    <div class="savings">→ Save ~85% on compute costs and improve runtime by 3.7x</div>
+                    <div class="savings">→ Attribute $4,200/month to specific pipelines, tasks, and teams</div>
                 </div>
             </div>
             
