@@ -152,12 +152,12 @@
 
     <script>
         const axisDescriptions = {
-            'Execution Unit Awareness': 'Ability to organize telemetry around pipeline runs, tasks, and tools rather than services or hosts.',
-            'Short-lived Process Visibility': 'Capturing behavior of processes and containers that run for seconds or minutes.',
-            'Pipeline/Run Attribution': 'Associating resource usage and behavior with specific pipeline runs and execution steps.',
-            'Cost Attribution Granularity': 'Breaking down compute costs by pipeline, run, task, or tool.',
-            'Host-observed Behavior': 'Observing actual runtime behavior from the host and container runtime.',
-            'Dashboard Flexibility': 'Ability to build custom visualizations from arbitrary data sources and queries.'
+            'Execution Unit Awareness': 'Pipelines, runs, tasks, tools as first-class concepts. Grafana has no native execution model—possible only via custom labels and dashboard logic. Tracer treats these as primary objects.',
+            'Short-lived Process Visibility': 'Visibility into short-lived jobs, subprocesses, containers. Grafana depends on scrape interval and exporters, often missing short-lived work. Tracer captures them reliably via host observation.',
+            'Pipeline/Run Attribution': 'Ability to attribute behavior to a specific pipeline execution. Grafana requires manual tagging and careful query construction. Tracer provides automatic, intrinsic attribution.',
+            'Cost Attribution Granularity': 'Cost by pipeline, run, task, tool, user, team. Grafana has no native cost model. Tracer maps cost directly to execution units.',
+            'Host-observed Behavior': 'What actually happens at the OS/container runtime level. Grafana visualizes what exporters emit. Tracer directly observes CPU, memory, I/O, and scheduling.',
+            'Dashboard Flexibility': 'Ability to design arbitrary visualizations and layouts. Grafana offers extremely flexible dashboards. Tracer provides execution-aware dashboards optimized for meaning over flexibility.'
         };
 
         const ctx = document.getElementById('radarChart').getContext('2d');
@@ -175,7 +175,7 @@
                 datasets: [
                     {
                         label: 'Grafana',
-                        data: [1, 1, 1, 1, 1, 5],
+                        data: [1, 1, 1, 0, 1, 5],
                         backgroundColor: 'rgba(59, 130, 246, 0.15)',
                         borderColor: '#3b82f6',
                         borderWidth: 2,
