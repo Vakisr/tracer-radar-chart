@@ -143,11 +143,11 @@
         <div class="legend">
             <div class="legend-item">
                 <div class="legend-color" style="background: #3b82f6;"></div>
-                <span>Dagster-ONLY</span>
+                <span>Dagster (orchestration visibility)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #27BF9F;"></div>
-                <span>Dagster + Tracer</span>
+                <span>Dagster + Tracer (execution visibility)</span>
             </div>
         </div>
         <div class="hint">Hover over the chart to see detailed descriptions</div>
@@ -169,8 +169,8 @@
             ],
             datasets: [
                 {
-                    label: 'Dagster-ONLY',
-                    data: [4, 2, 1, 0, 0, 2, 1, 5, 2],
+                    label: 'Dagster (orchestration)',
+                    data: [4, 2, 3, 0, 1, 2, 1, 4, 2],
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.15)',
                     fill: true,
@@ -184,19 +184,19 @@
                     pointHoverBorderColor: '#3b82f6',
                     pointHoverBorderWidth: 3,
                     descriptions: [
-                        'Only Dagster Platform',
-                        'Basic metrics per task',
-                        'N/A, only Python ops',
-                        'N/A',
-                        'N/A',
-                        'Manual via dashboard',
-                        'Limited detection capabilities',
-                        'Optimized for Python workflows',
+                        'Strong dependency modeling, execution semantics, dev ergonomics',
+                        'Task status, logs, and metadata only',
+                        'Python-first, extensible, modern design',
+                        'Does not inspect kernel or container runtime',
+                        'Application-level, user-emitted logs',
+                        'Surfaces durations and failures, no cost attribution',
+                        'Rule-based and state-based alerting only',
+                        'Widely used in bioinformatics, data science, ML',
                         'Task/runtime level'
                     ]
                 },
                 {
-                    label: 'Dagster + Tracer',
+                    label: 'Dagster + Tracer (execution)',
                     data: [5, 5, 5, 5, 5, 5, 5, 5, 5],
                     borderColor: '#27BF9F',
                     backgroundColor: 'rgba(39, 191, 159, 0.15)',
