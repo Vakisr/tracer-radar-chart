@@ -285,9 +285,9 @@
                         </div>
                     </div>
                     <div class="step-content">
-                        Pipeline: rnaseq_analysis<br>
-                        vCPU: 64<br>
-                        Memory: 488 GB
+                        EC2 Instance: i-0abc123<br>
+                        CPU: 15% avg<br>
+                        Memory: 22% avg
                     </div>
                 </div>
             </div>
@@ -311,14 +311,14 @@
                         </div>
                     </div>
                     <div class="step-content">
-                        Instance: r5.16xlarge<br>
-                        vCPU: 64<br>
-                        Memory: 488 GB<br>
-                        Job #4521 running...<br>
-                        Task: STAR<br>
-                        Duration: 47 min
+                        Type: r5.16xlarge<br>
+                        CPU: 15% avg<br>
+                        Memory: 22% avg<br>
+                        Batch Job: JOB-4521<br>
+                        Tool: STAR alignment<br>
+                        Runtime: 47 min
                     </div>
-                    <div class="diagnosis gap-diagnosis"><strong>The gap:</strong> 92% CPU idle, 82% RAM idle, you are paying for compute you don't use.</div>
+                    <div class="diagnosis gap-diagnosis"><strong>The gap:</strong> CloudWatch shows healthy metrics, but cannot see execution bottlenecks inside containers.</div>
                 </div>
             </div>
             
@@ -340,7 +340,7 @@
                         </div>
                     </div>
                     <div class="pipeline-tag">
-                        Pipeline: rnaseq_analysis → STAR → Job #4521
+                        EC2: i-0abc123 → STAR alignment → Process #8472
                     </div>
                     <div class="util-row">
                         <span class="util-label">CPU</span>
@@ -381,9 +381,9 @@
                         </div>
                     </div>
                     <div class="step-content">
-                        Instance: r6id.2xlarge<br>
-                        vCPU: 8<br>
-                        Memory: 64 GB<br>
+                        Right-size: r6id.2xlarge<br>
+                        vCPU: 8 (from 64)<br>
+                        Memory: 64 GB (from 488)<br>
                         Storage: NVMe SSD
                     </div>
                     <div class="savings">→ Save ~85% on compute costs and improve runtime by 3.7x</div>
