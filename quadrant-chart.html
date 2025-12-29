@@ -101,7 +101,7 @@
             padding: 0; position: relative; height: 40px;
         }
         
-        .connector-line { width: 2px; height: 100%; background: rgba(107, 114, 128, 0.4); position: relative; overflow: hidden; } .connector-pulse { position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%); animation: pulse-down 0.4s ease-in-out infinite; animation-play-state: paused; } .connector.c1 .connector-pulse { animation-delay: 0s; animation-play-state: running; animation-duration: 2s; } .connector.c2 .connector-pulse { animation-delay: 0.4s; animation-play-state: running; animation-duration: 2s; } .connector.c3 .connector-pulse { animation-delay: 0.8s; animation-play-state: running; animation-duration: 2s; } .connector.c4 .connector-pulse { animation-delay: 1.2s; animation-play-state: running; animation-duration: 2s; } @keyframes pulse-down { 0%, 20% { top: -20px; opacity: 0; } 25% { top: -20px; opacity: 1; } 45% { top: 100%; opacity: 1; } 50%, 100% { top: 100%; opacity: 0; } }
+        /* Border pulse animation system */ .step-card, .gap-card { position: relative; overflow: visible; } .border-pulse { position: absolute; pointer-events: none; } .border-pulse.top { top: -1px; left: 50%; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-top 4s ease-in-out infinite; } .border-pulse.left { top: 0; left: -1px; width: 2px; height: 0; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-left 4s ease-in-out infinite; } .border-pulse.right { top: 0; right: -1px; width: 2px; height: 0; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-right 4s ease-in-out infinite; } .border-pulse.bottom-left { bottom: -1px; left: -1px; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-bottom-left 4s ease-in-out infinite; } .border-pulse.bottom-right { bottom: -1px; right: -1px; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-bottom-right 4s ease-in-out infinite; } @keyframes pulse-top { 0%, 5% { width: 0; left: 50%; opacity: 0; } 6% { opacity: 1; } 12% { width: 100%; left: 0; opacity: 1; } 13%, 100% { width: 100%; left: 0; opacity: 0; } } @keyframes pulse-left { 0%, 12% { height: 0; top: 0; opacity: 0; } 13% { opacity: 1; } 25% { height: 100%; top: 0; opacity: 1; } 26%, 100% { height: 100%; top: 0; opacity: 0; } } @keyframes pulse-right { 0%, 12% { height: 0; top: 0; opacity: 0; } 13% { opacity: 1; } 25% { height: 100%; top: 0; opacity: 1; } 26%, 100% { height: 100%; top: 0; opacity: 0; } } @keyframes pulse-bottom-left { 0%, 25% { width: 0; left: -1px; opacity: 0; } 26% { opacity: 1; } 38% { width: 51%; left: -1px; opacity: 1; } 39%, 100% { width: 51%; left: -1px; opacity: 0; } } @keyframes pulse-bottom-right { 0%, 25% { width: 0; right: -1px; opacity: 0; } 26% { opacity: 1; } 38% { width: 51%; right: -1px; opacity: 1; } 39%, 100% { width: 51%; right: -1px; opacity: 0; } } .step.s1 .border-pulse { animation-delay: 0s; } .step.s2 .border-pulse { animation-delay: 1s; } .step.s3 .border-pulse { animation-delay: 2s; } .step.s4 .border-pulse { animation-delay: 3s; } .step.s5 .border-pulse { animation-delay: 4s; } .connector-line { width: 2px; height: 100%; background: rgba(107, 114, 128, 0.4); position: relative; overflow: hidden; } .connector-pulse { position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); } .connector.c1 .connector-pulse { animation: pulse-connector 4s ease-in-out infinite; animation-delay: 0.38s; } .connector.c2 .connector-pulse { animation: pulse-connector 4s ease-in-out infinite; animation-delay: 1.38s; } .connector.c3 .connector-pulse { animation: pulse-connector 4s ease-in-out infinite; animation-delay: 2.38s; } .connector.c4 .connector-pulse { animation: pulse-connector 4s ease-in-out infinite; animation-delay: 3.38s; } @keyframes pulse-connector { 0%, 1% { top: -20px; opacity: 0; } 2% { opacity: 1; } 10% { top: 100%; opacity: 1; } 11%, 100% { top: 100%; opacity: 0; } }
         
         /* Intent - Purple */
         .step-card.intent { border: 1px solid rgba(107, 114, 128, 0.35); }
@@ -274,8 +274,8 @@
         <div class="flow">
             
             <!-- 1. Intent - Seqera -->
-            <div class="step">
-                <div class="step-card intent">
+            <div class="step s1">
+                <div class="step-card intent"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
                     <div class="step-badge">1. Intent</div>
                     <div class="step-header">
                         
@@ -299,8 +299,8 @@
             </div>
             
             <!-- The Gap -->
-            <div class="step">
-                <div class="gap-card">
+            <div class="step s2">
+                <div class="gap-card"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
                     <div class="gap-badge">The Gap — Wasted Spend</div>
                     <div class="gap-stat">92% CPU Idle</div>
                     <div class="gap-text">You're paying for compute you don't use.</div>
@@ -314,8 +314,8 @@
             </div>
             
             <!-- 2. Execution - Kernel -->
-            <div class="step">
-                <div class="step-card execution">
+            <div class="step s3">
+                <div class="step-card execution"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
                     <div class="step-badge">2. Execution</div>
                     <div class="step-header">
                         
@@ -342,8 +342,8 @@
             </div>
             
             <!-- 3. Reality - Tracer -->
-            <div class="step">
-                <div class="step-card reality">
+            <div class="step s4">
+                <div class="step-card reality"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
                     <div class="step-badge">3. Reality</div>
                     <div class="step-header">
                         
@@ -383,8 +383,8 @@
             </div>
             
             <!-- 4. The Fix -->
-            <div class="step">
-                <div class="step-card fix">
+            <div class="step s5">
+                <div class="step-card fix"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
                     <div class="step-badge">4. The Fix</div>
                     <div class="step-header">
                         
