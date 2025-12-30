@@ -22,6 +22,8 @@
             --gray-light: #9CA3AF;
             --white: #FFFFFF;
             --black: #0A0A0A;
+            --collect-pink: #FB68E1;
+            --collect-purple: #953E96;
         }
         
         body {
@@ -32,7 +34,7 @@
             padding: 20px 0;
         }
         
-        .container { max-width: 100%; margin: 0 auto; padding: 0; }
+        .container { max-width: 100%; margin: 0 auto; padding: 20px 0 0 0; overflow: hidden; }
         
         .flow { display: flex; flex-direction: column; gap: 0; }
         
@@ -43,6 +45,7 @@
             padding: 24px 28px;
             position: relative;
             background: #101010;
+            border: 1px solid rgba(107, 114, 128, 0.35);
         }
         
         .step-badge {
@@ -66,30 +69,12 @@
             margin-bottom: 12px;
         }
         
-        .step-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 400;
-            font-size: 1rem;
-        }
-        
-        .step-tag {
-            font-size: 1.05rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            opacity: 0.7;
-        }
-        
         .step-title {
             font-size: 1.4rem;
             font-weight: 400;
         }
         
-        .step-content { font-family: "Chakra Petch", sans-serif;
+        .step-content {
             font-family: "Chakra Petch", sans-serif;
             font-size: 1rem;
             line-height: 1.6;
@@ -98,61 +83,163 @@
         .connector {
             display: flex;
             justify-content: center;
-            padding: 0; position: relative; height: 40px;
+            padding: 0;
+            position: relative;
+            height: 40px;
         }
         
-        /* Border pulse animation system - Seamless flow */ .step-card, .gap-card { position: relative; overflow: visible; } .border-pulse { position: absolute; pointer-events: none; } .border-pulse.top { top: -1px; left: 50%; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-top 10s linear infinite; } .border-pulse.left { top: 0; left: -1px; width: 2px; height: 0; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-left 10s linear infinite; } .border-pulse.right { top: 0; right: -1px; width: 2px; height: 0; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-right 10s linear infinite; } .border-pulse.bottom-left { bottom: -1px; left: -1px; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-bottom-left 10s linear infinite; } .border-pulse.bottom-right { bottom: -1px; right: -1px; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-bottom-right 10s linear infinite; } @keyframes pulse-top { 0% { width: 0; left: 50%; opacity: 1; } 4% { width: 100%; left: 0; opacity: 1; } 5% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-left { 0%, 4% { height: 0; top: 0; opacity: 0; } 5% { height: 0; opacity: 1; } 14% { height: 100%; opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-right { 0%, 4% { height: 0; top: 0; opacity: 0; } 5% { height: 0; opacity: 1; } 14% { height: 100%; opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-bottom-left { 0%, 14% { width: 0; opacity: 0; } 15% { width: 0; opacity: 1; } 20% { width: 51%; opacity: 1; } 21% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-bottom-right { 0%, 14% { width: 0; opacity: 0; } 15% { width: 0; opacity: 1; } 20% { width: 51%; opacity: 1; } 21% { opacity: 0; } 100% { opacity: 0; } } .step.s1 .border-pulse { animation-delay: 0s; } .step.s2 .border-pulse { animation-delay: 2.6s; } .step.s3 .border-pulse { animation-delay: 5.2s; } .step.s4 .border-pulse { animation: none; } .step-card.fix { animation: border-flash 10s ease-in-out infinite; animation-delay: 7.8s; } .connector-line { width: 2px; height: 100%; background: rgba(107, 114, 128, 0.4); position: relative; overflow: hidden; } .connector-pulse { position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-connector 10s linear infinite; } @keyframes pulse-connector { 0% { top: -20px; opacity: 1; } 6% { top: 100%; opacity: 1; } 7% { opacity: 0; } 100% { opacity: 0; } } .connector.c1 .connector-pulse { animation-delay: 2s; } .connector.c2 .connector-pulse { animation-delay: 4.6s; } .connector.c3 .connector-pulse { animation-delay: 7.2s; } @keyframes border-flash { 0% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 2% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); } 10% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 12% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); } 20% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 100% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } }
+        .connector-line {
+            width: 2px;
+            height: 100%;
+            background: rgba(107, 114, 128, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .connector-pulse {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            opacity: 0;
+        }
+        
+        /* First card is ALWAYS visible */
+        .step.s1 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Other elements start hidden */
+        .step.s2, .step.s3, .step.s4, .connector {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        
+        /* Slide in animation - from top */
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Fade out animation for smooth loop reset */
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(0); }
+        }
+        
+        /* White border flash animation for boxes 2-3 */
+        @keyframes border-flash-white {
+            0%, 5% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            10% { border-color: #FFFFFF; box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+            25% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            30% { border-color: #FFFFFF; box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+            45% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            100% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+        }
+        
+        /* Teal border flash animation for Fix box */
+        @keyframes border-flash-teal {
+            0%, 5% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            10% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); }
+            25% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            30% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); }
+            45% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            100% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+        }
+        
+        /* Connector pulse animation */
+        @keyframes pulse-connector {
+            0% { top: -20px; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        
+        /* Fade out state - cards 2-4 and connectors fade out, card 1 stays */
+        .fade-out .step.s2, .fade-out .step.s3, .fade-out .step.s4, .fade-out .connector {
+            animation: fadeOut 0.8s ease-out forwards !important;
+        }
+        .fade-out .step .step-card {
+            animation: none !important;
+        }
+        .fade-out .connector .connector-pulse {
+            animation: none !important;
+        }
+        
+        /* Animation classes - applied via JavaScript on scroll */
+        /* Step 1: Intent - always visible, no animation needed */
+        
+        /* Connector 1 */
+        .animate .connector.c1 {
+            animation: slideIn 0.4s ease-out forwards;
+            animation-delay: 0.6s;
+        }
+        .animate .connector.c1 .connector-pulse {
+            animation: pulse-connector 0.4s ease-out forwards;
+            animation-delay: 0.8s;
+        }
+        
+        /* Step 2: Execution */
+        .animate .step.s2 {
+            animation: slideIn 0.6s ease-out forwards;
+            animation-delay: 1.2s;
+        }
+        .animate .step.s2 .step-card {
+            animation: border-flash-white 2s ease-in-out forwards;
+            animation-delay: 1.8s;
+        }
+        
+        /* Connector 2 */
+        .animate .connector.c2 {
+            animation: slideIn 0.4s ease-out forwards;
+            animation-delay: 2.6s;
+        }
+        .animate .connector.c2 .connector-pulse {
+            animation: pulse-connector 0.4s ease-out forwards;
+            animation-delay: 2.8s;
+        }
+        
+        /* Step 3: Reality */
+        .animate .step.s3 {
+            animation: slideIn 0.6s ease-out forwards;
+            animation-delay: 3.2s;
+        }
+        .animate .step.s3 .step-card {
+            animation: border-flash-white 2s ease-in-out forwards;
+            animation-delay: 3.8s;
+        }
+        
+        /* Connector 3 */
+        .animate .connector.c3 {
+            animation: slideIn 0.4s ease-out forwards;
+            animation-delay: 4.6s;
+        }
+        .animate .connector.c3 .connector-pulse {
+            animation: pulse-connector 0.4s ease-out forwards;
+            animation-delay: 4.8s;
+        }
+        
+        /* Step 4: Fix */
+        .animate .step.s4 {
+            animation: slideIn 0.6s ease-out forwards;
+            animation-delay: 5.2s;
+        }
+        .animate .step.s4 .step-card {
+            animation: border-flash-teal 2s ease-in-out forwards;
+            animation-delay: 5.8s;
+        }
         
         /* Intent - Purple */
-        .step-card.intent { border: 1px solid rgba(107, 114, 128, 0.35); }
         .step-card.intent .step-badge { color: #FFFFFF; }
-        .step-card.intent .step-icon { background: var(--purple); color: var(--white); }
-        .step-card.intent .step-tag { color: var(--purple); }
         .step-card.intent .step-title { color: var(--purple-light); }
         .step-card.intent .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
-        .arrow.purple svg { stroke: var(--purple); }
-        
-        /* Gap - Red */
-        .gap-card {
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(107, 114, 128, 0.35);
-            border-radius: 0.125rem;
-            padding: 20px 28px;
-            text-align: center;
-        }
-        
-        .gap-badge {
-            display: inline-block;
-            background: #101010;
-            padding: 4px 14px;
-            border-radius: 0.125rem;
-            font-family: 'Chakra Petch', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--red);
-            margin-bottom: 10px;
-        }
-        
-        .gap-stat {
-            font-size: 2rem;
-            font-weight: 400;
-            color: var(--red);
-            margin-bottom: 6px;
-        }
-        
-        .gap-text {
-            font-size: 1.05rem;
-            color: var(--red-light);
-        }
-        .arrow.red svg { stroke: var(--red); }
         
         /* Execution - Gray */
-        .step-card.execution { border: 1px solid rgba(107, 114, 128, 0.35); }
         .step-card.execution .step-badge { color: #FFFFFF; }
-        .step-card.execution .step-icon { background: var(--gray); color: var(--white); }
-        .step-card.execution .step-tag { color: var(--gray); }
         .step-card.execution .step-title { color: var(--gray-light); }
         .step-card.execution .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
         .step-card.execution .handoff-label { 
@@ -161,20 +248,17 @@
             margin-bottom: 8px;
             font-style: italic;
         }
-        .step-card.execution .execution-note {
+        .execution-note {
             margin-top: 14px;
             font-family: "Chakra Petch", sans-serif;
             font-size: 0.95rem;
             color: #9CA3AF;
             line-height: 1.5;
         }
-        .arrow.gray svg { stroke: var(--gray); }
         
         /* Reality - Teal */
-        .step-card.reality { border: 1px solid rgba(107, 114, 128, 0.35); border-radius: 0.125rem; }
+        .step-card.reality { border-radius: 0.125rem; }
         .step-card.reality .step-badge { color: #FFFFFF; }
-        .step-card.reality .step-icon { background: var(--teal); color: var(--white); }
-        .step-card.reality .step-tag { color: #FFFFFF; }
         .step-card.reality .step-title { color: #FFFFFF; }
         
         .pipeline-tag {
@@ -216,7 +300,7 @@
         
         .util-fill { height: 100%; border-radius: 4px; }
         .util-fill.low { background: #FFFFFF; }
-        .util-fill.high { background: var(--red); }
+        .util-fill.high { background: linear-gradient(90deg, var(--collect-pink), var(--collect-purple)); }
         
         .util-value {
             width: 50px;
@@ -225,36 +309,7 @@
             font-weight: 600;
         }
         .util-value.low { color: #D1D5DB; }
-        .util-value.high { color: var(--red); }
-        
-        .util-note {
-            font-size: 0.85rem;
-            color: #9CA3AF;
-            margin-left: 82px;
-            margin-top: -4px;
-            font-style: italic;
-        }
-        
-        .diagnosis {
-            margin-top: 14px;
-            background: rgba(56, 189, 164, 0.2);
-            border-left: 3px solid #38BDA4;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-family: "Chakra Petch", sans-serif;
-            font-size: 1.05rem;
-            font-weight: 400;
-            color: #FFFFFF;
-        }
-        
-        .subprocess-note {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #9CA3AF;
-            font-style: italic;
-        }
-        
-        .arrow.teal svg { stroke: var(--teal); }
+        .util-value.high { color: var(--collect-pink); }
         
         /* Tracer Logo */
         .tracer-logo {
@@ -267,9 +322,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-        .tracer-text-old {
-            color: #FFFFFF;
         }
         .tune-text {
             background: linear-gradient(135deg, #38BDA4, #76E9D3);
@@ -285,11 +337,8 @@
         }
         
         /* Fix - Green */
-        .step-card.fix { border: 1px solid rgba(107, 114, 128, 0.35); border-radius: 0.125rem; }
+        .step-card.fix { border-radius: 0.125rem; }
         .step-card.fix .step-badge { color: #FFFFFF; }
-        .step-card.fix .step-icon { background: var(--green); color: var(--black); }
-        .step-card.fix .step-tag { color: var(--green); }
-        .step-card.fix .step-title { color: var(--green); }
         .step-card.fix .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
         
         .config-label {
@@ -300,38 +349,32 @@
         }
         
         .savings {
+            display: inline-block;
+            background: linear-gradient(135deg, #38BDA4, #76E9D3);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 1.05rem;
             margin-top: 14px;
-            font-size: 1.25rem;
-            font-weight: 400;
-            color: #FFFFFF;
-        }
-        
-        .config-hint {
-            margin-top: 8px;
-            font-size: 0.9rem;
-            color: #9CA3AF;
-            font-style: italic;
+            color: #000000;
+            font-family: "Chakra Petch", sans-serif;
         }
         
         @media (max-width: 600px) {
             .step-card { padding: 20px; }
             .step-title { font-size: 1.25rem; }
-            .gap-stat { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="flow">
+        <div class="flow" id="flow">
             
             <!-- 1. Intent - Seqera / Nextflow -->
             <div class="step s1">
-                <div class="step-card intent"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
+                <div class="step-card intent">
                     <div class="step-badge">1. Intent</div>
                     <div class="step-header">
-                        
                         <div class="step-titles">
-                            
                             <div class="step-title">Seqera</div>
                         </div>
                     </div>
@@ -351,12 +394,10 @@
             
             <!-- 2. Execution - AWS Batch / Kernel -->
             <div class="step s2">
-                <div class="step-card execution"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
+                <div class="step-card execution">
                     <div class="step-badge">2. Execution (AWS Batch / Kernel)</div>
                     <div class="step-header">
-                        
                         <div class="step-titles">
-                            
                             <div class="step-title">Execution Reality</div>
                         </div>
                     </div>
@@ -367,7 +408,7 @@
                         Task: STAR_ALIGN (job 4521)<br>
                         Duration: 47 min
                     </div>
-                    <div class="execution-note">Nextflow requested resources statically. Runtime behavior was not observable from logs or directives. → 92% CPU idle, 82% RAM idle</div>
+                    <div class="execution-note">Nextflow requested resources statically. Runtime behavior was not observable from logs or directives.</div>
                 </div>
             </div>
             
@@ -377,12 +418,10 @@
             
             <!-- 3. Reality - Tracer/collect -->
             <div class="step s3">
-                <div class="step-card reality"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
+                <div class="step-card reality">
                     <div class="step-badge">3. Reality</div>
                     <div class="step-header">
-                        
                         <div class="step-titles">
-                            
                             <span class="tracer-logo"><span class="tracer-text">Tracer/</span><span class="collect-text">collect</span></span>
                         </div>
                     </div>
@@ -405,11 +444,7 @@
                         <div class="util-bar"><div class="util-fill high" style="width: 100%"></div></div>
                         <span class="util-value high">114%</span>
                     </div>
-                    <div class="util-note">STAR waiting on BAM writes (fsync)</div>
-                    <div class="subprocess-note">Includes STAR, samtools, and helper subprocesses</div>
-                    <div class="diagnosis">
-                        Diagnosis: I/O bound. Adding CPU/RAM won't help.
-                    </div>
+                    <div class="execution-note">92% CPU idle, 82% RAM idle. I/O bound. Adding CPU/RAM won't help.</div>
                 </div>
             </div>
             
@@ -419,13 +454,11 @@
             
             <!-- 4. The Fix - Tracer/tune -->
             <div class="step s4">
-                <div class="step-card fix"><div class="border-pulse top"></div><div class="border-pulse left"></div><div class="border-pulse right"></div><div class="border-pulse bottom-left"></div><div class="border-pulse bottom-right"></div>
+                <div class="step-card fix">
                     <div class="step-badge">4. The Fix</div>
                     <div class="step-header">
-                        
                         <div class="step-titles">
                             <span class="tracer-logo"><span class="tracer-text">Tracer/</span><span class="tune-text">tune</span></span>
-                            
                         </div>
                     </div>
                     <div class="config-label">Suggested for process STAR_ALIGN:</div>
@@ -435,12 +468,76 @@
                         disk = local NVMe<br>
                         Instance: r6id.2xlarge
                     </div>
-                    <div class="config-hint">Drop-in replacement for current profile</div>
-                    <div class="savings">→ Save ~85% on compute costs and improve runtime by 3.7x</div>
+                    <div class="savings">This configuration will save ~85% on compute costs and improve runtime by 3.7x</div>
                 </div>
             </div>
             
         </div>
     </div>
+    
+    <script>
+        const flow = document.getElementById('flow');
+        let animationTimeout = null;
+        let isInView = false;
+        
+        const ANIMATION_DURATION = 8000;
+        const PAUSE_DURATION = 5000;
+        const FADE_OUT_DURATION = 800;
+        const RESTART_DELAY = 300;
+        
+        function startAnimationLoop() {
+            if (!isInView) return;
+            
+            flow.classList.remove('fade-out');
+            flow.classList.remove('animate');
+            void flow.offsetWidth;
+            flow.classList.add('animate');
+            
+            animationTimeout = setTimeout(() => {
+                if (!isInView) return;
+                
+                flow.classList.remove('animate');
+                flow.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    if (isInView) {
+                        startAnimationLoop();
+                    }
+                }, FADE_OUT_DURATION + RESTART_DELAY);
+                
+            }, ANIMATION_DURATION + PAUSE_DURATION);
+        }
+        
+        function stopAnimationLoop() {
+            if (animationTimeout) {
+                clearTimeout(animationTimeout);
+                animationTimeout = null;
+            }
+        }
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    isInView = true;
+                    stopAnimationLoop();
+                    startAnimationLoop();
+                } else {
+                    isInView = false;
+                    stopAnimationLoop();
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        observer.observe(flow);
+        
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                isInView = true;
+                startAnimationLoop();
+            }, 300);
+        });
+    </script>
 </body>
 </html>
