@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seqera + Tracer - Pipeline Intelligence</title>
+    <title>Apache Airflow + Tracer - Pipeline Intelligence</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap');
         
@@ -348,6 +348,14 @@
             font-family: "Chakra Petch", sans-serif;
         }
         
+        .scope-label {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            margin-top: 10px;
+            font-family: "Chakra Petch", sans-serif;
+            font-style: italic;
+        }
+        
         .savings {
             display: inline-block;
             background: linear-gradient(135deg, #38BDA4, #76E9D3);
@@ -369,21 +377,25 @@
     <div class="container">
         <div class="flow" id="flow">
             
-            <!-- 1. Intent - Seqera / Nextflow -->
+            <!-- 1. Intent - Apache Airflow DAG -->
             <div class="step s1">
                 <div class="step-card intent">
                     <div class="step-badge">1. Intent</div>
                     <div class="step-header">
                         <div class="step-titles">
-                            <div class="step-title">Seqera</div>
+                            <div class="step-title">Apache Airflow</div>
                         </div>
                     </div>
                     <div class="step-content">
-                        Pipeline: nf-core/rnaseq<br>
-                        Process: STAR_ALIGN<br>
-                        Profile: awsbatch<br>
-                        cpus = 64<br>
-                        memory = 488.GB
+                        DAG: rnaseq_dag<br>
+                        Task: star_align<br>
+                        Operator: KubernetesPodOperator<br>
+                        Run: scheduled__2025-12-30T15:00:00<br>
+                        TaskInstance: star_align[run_id]<br>
+                        <br>
+                        Requested resources:<br>
+                        CPUs: 64<br>
+                        Memory: 488 GB
                     </div>
                 </div>
             </div>
@@ -392,23 +404,24 @@
                 <div class="connector-line"><div class="connector-pulse"></div></div>
             </div>
             
-            <!-- 2. Execution - AWS Batch / Kernel -->
+            <!-- 2. Execution - Airflow Executor / Infrastructure -->
             <div class="step s2">
                 <div class="step-card execution">
-                    <div class="step-badge">2. Execution (AWS Batch / Kernel)</div>
+                    <div class="step-badge">2. Execution (Airflow Executor / Infrastructure)</div>
                     <div class="step-header">
                         <div class="step-titles">
                             <div class="step-title">Execution Reality</div>
                         </div>
                     </div>
-                    <div class="handoff-label">Nextflow task → Batch job</div>
                     <div class="step-content">
-                        Instance: r5.16xlarge<br>
-                        Container: quay.io/biocontainers/star<br>
-                        Task: STAR_ALIGN (job 4521)<br>
+                        Executor: KubernetesExecutor<br>
+                        TaskInstance: star_align<br>
+                        Pod: airflow-star-align-4521<br>
+                        Node / instance: r5.16xlarge<br>
+                        Container image: quay.io/biocontainers/star<br>
                         Duration: 47 min
                     </div>
-                    <div class="execution-note">Nextflow requested resources statically. Runtime behavior was not observable from logs or directives.</div>
+                    <div class="execution-note">Airflow launched the task using statically defined operator resources. Runtime behavior inside the container was not observable from Airflow logs or scheduler metrics.</div>
                 </div>
             </div>
             
@@ -425,9 +438,9 @@
                             <span class="tracer-logo"><span class="tracer-text">Tracer/</span><span class="collect-text">collect</span></span>
                         </div>
                     </div>
-                    <div class="container-label">Observed inside STAR_ALIGN container</div>
+                    <div class="container-label">Observed inside Airflow TaskInstance star_align</div>
                     <div class="pipeline-tag">
-                        nf-core/rnaseq → STAR_ALIGN → job 4521
+                        Airflow DAG rnaseq_dag → run → task star_align
                     </div>
                     <div class="util-row">
                         <span class="util-label">CPU</span>
@@ -444,7 +457,7 @@
                         <div class="util-bar"><div class="util-fill high" style="width: 100%"></div></div>
                         <span class="util-value high">114%</span>
                     </div>
-                    <div class="execution-note">92% CPU idle, 82% RAM idle. I/O bound. Adding CPU/RAM won't help.</div>
+                    <div class="execution-note">Diagnosis: TaskInstance is I/O-bound. Increasing CPU or memory in the operator configuration will not improve runtime.</div>
                 </div>
             </div>
             
@@ -461,14 +474,17 @@
                             <span class="tracer-logo"><span class="tracer-text">Tracer/</span><span class="tune-text">tune</span></span>
                         </div>
                     </div>
-                    <div class="config-label">Suggested for process STAR_ALIGN:</div>
+                    <div class="config-label">Recommended Airflow task-level configuration for star_align:</div>
                     <div class="step-content">
-                        cpus = 8<br>
-                        memory = 64.GB<br>
-                        disk = local NVMe<br>
-                        Instance: r6id.2xlarge
+                        Operator resources:<br>
+                        CPUs: 8<br>
+                        Memory: 64 GB<br>
+                        Storage: Local NVMe / high-throughput volume<br>
+                        Node / instance: r6id.2xlarge<br>
+                        Executor profile: io_optimized
                     </div>
-                    <div class="savings">This configuration will save ~85% on compute costs and improve runtime by 3.7x</div>
+                    <div class="scope-label">Scope: Task-level override (no DAG-wide resource changes)</div>
+                    <div class="savings">This change updates the Airflow task's operator configuration. Same DAG, same task — ~85% lower compute cost and 3.7× faster runtime.</div>
                 </div>
             </div>
             
