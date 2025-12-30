@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flyte + Tracer - Pipeline Intelligence</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --purple: #7C3AED;
+            --purple-light: #A78BFA;
+            --teal: #3B82F6;
+            --teal-light: #60A5FA;
+            --green: #10B981;
+            --green-light: #34D399;
+            --red: #EF4444;
+            --red-light: #FCA5A5;
+            --gray: #6B7280;
+            --gray-light: #9CA3AF;
+            --white: #FFFFFF;
+            --black: #0A0A0A;
+            --collect-pink: #FB68E1;
+            --collect-purple: #953E96;
+        }
+        
+        body {
+            font-family: "Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            background: #101010;
+            color: #E5E5E5;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .container { max-width: 100%; margin: 0 auto; padding: 20px 0 0 0; overflow: visible; }
+        
+        .flow { display: flex; flex-direction: column; gap: 0; }
+        
+        .step { width: 100%; }
+        
+        .step-card {
+            border-radius: 0.125rem;
+            padding: 24px 28px;
+            position: relative;
+            background: #101010;
+            border: 1px solid rgba(107, 114, 128, 0.35);
+        }
+        
+        .step-badge {
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            background: #101010;
+            padding: 4px 14px;
+            border-radius: 0.125rem;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 400;
+        }
+        
+        .step-content {
+            font-family: "Chakra Petch", sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .connector {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            position: relative;
+            height: 40px;
+        }
+        
+        .connector-line {
+            width: 2px;
+            height: 100%;
+            background: rgba(107, 114, 128, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .connector-pulse {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            opacity: 0;
+        }
+        
+        /* First card is ALWAYS visible */
+        .step.s1 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Other elements start hidden */
+        .step.s2, .step.s3, .step.s4, .connector {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        
+        /* Slide in animation - from top */
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Fade out animation for smooth loop reset */
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(0); }
+        }
+        
+        /* White border flash animation for boxes 2-3 */
+        @keyframes border-flash-white {
+            0%, 5% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            10% { border-color: #FFFFFF; box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+            25% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            30% { border-color: #FFFFFF; box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+            45% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            100% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+        }
+        
+        /* Teal border flash animation for Fix box */
+        @keyframes border-flash-teal {
+            0%, 5% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            10% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); }
+            25% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            30% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); }
+            45% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+            100% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; }
+        }
+        
+        /* Connector pulse animation */
+        @keyframes pulse-connector {
+            0% { top: -20px; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        
+        /* Fade out state - cards 2-4 and connectors fade out, card 1 stays */
+        .fade-out .step.s2, .fade-out .step.s3, .fade-out .step.s4, .fade-out .connector {
+            animation: fadeOut 0.8s ease-out forwards !important;
+        }
+        .fade-out .step .step-card {
+            animation: none !important;
+        }
+        .fade-out .connector .connector-pulse {
+            animation: none !important;
+        }
+        
+        /* Animation classes - applied via JavaScript on scroll */
+        /* Step 1: Intent - always visible, no animation needed */
+        
+        /* Connector 1 */
+        .animate .connector.c1 {
+            animation: slideIn 0.4s ease-out forwards;
+            animation-delay: 0.6s;
+        }
+        .animate .connector.c1 .connector-pulse {
+            animation: pulse-connector 0.4s ease-out forwards;
+            animation-delay: 0.8s;
+        }
+        
+        /* Step 2: Execution */
+        .animate .step.s2 {
+            animation: slideIn 0.6s ease-out forwards;
+            animation-delay: 1.2s;
+        }
+        .animate .step.s2 .step-card {
+            animation: border-flash-white 2s ease-in-out forwards;
+            animation-delay: 1.8s;
+        }
+        
+        /* Connector 2 */
+        .animate .connector.c2 {
+            animation: slideIn 0.4s ease-out forwards;
+            animation-delay: 2.6s;
+        }
+        .animate .connector.c2 .connector-pulse {
+            animation: pulse-connector 0.4s ease-out forwards;
+            animation-delay: 2.8s;
+        }
+        
+        /* Step 3: Reality */
+        .animate .step.s3 {
+            animation: slideIn 0.6s ease-out forwards;
+            animation-delay: 3.2s;
+        }
+        .animate .step.s3 .step-card {
+            animation: border-flash-white 2s ease-in-out forwards;
+            animation-delay: 3.8s;
+        }
+        
+        /* Connector 3 */
+        .animate .connector.c3 {
+            animation: slideIn 0.4s ease-out forwards;
+            animation-delay: 4.6s;
+        }
+        .animate .connector.c3 .connector-pulse {
+            animation: pulse-connector 0.4s ease-out forwards;
+            animation-delay: 4.8s;
+        }
+        
+        /* Step 4: Fix */
+        .animate .step.s4 {
+            animation: slideIn 0.6s ease-out forwards;
+            animation-delay: 5.2s;
+        }
+        .animate .step.s4 .step-card {
+            animation: border-flash-teal 2s ease-in-out forwards;
+            animation-delay: 5.8s;
+        }
+        
+        /* Intent - Purple */
+        .step-card.intent .step-badge { color: #FFFFFF; }
+        .step-card.intent .step-title { color: var(--purple-light); }
+        .step-card.intent .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
+        
+        /* Execution - Gray */
+        .step-card.execution .step-badge { color: #FFFFFF; }
+        .step-card.execution .step-title { color: var(--gray-light); }
+        .step-card.execution .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
+        .step-card.execution .handoff-label { 
+            font-size: 0.85rem; 
+            color: #9CA3AF; 
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .execution-note {
+            margin-top: 14px;
+            font-family: "Chakra Petch", sans-serif;
+            font-size: 0.95rem;
+            color: #9CA3AF;
+            line-height: 1.5;
+        }
+        
+        /* Reality - Teal */
+        .step-card.reality { border-radius: 0.125rem; }
+        .step-card.reality .step-badge { color: #FFFFFF; }
+        .step-card.reality .step-title { color: #FFFFFF; }
+        
+        .pipeline-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #FB68E1, #953E96);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            color: #FFFFFF;
+            font-family: "Chakra Petch", sans-serif;
+        }
+        
+        .container-label {
+            font-size: 0.9rem;
+            color: #9CA3AF;
+            margin-bottom: 10px;
+            font-family: "Chakra Petch", sans-serif;
+            font-style: italic;
+        }
+        
+        .util-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+            font-size: 1.05rem;
+        }
+        
+        .util-label { color: #D1D5DB; width: 70px; font-family: "Chakra Petch", sans-serif; }
+        
+        .util-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .util-fill { height: 100%; border-radius: 4px; }
+        .util-fill.low { background: #FFFFFF; }
+        .util-fill.high { background: linear-gradient(90deg, var(--collect-pink), var(--collect-purple)); }
+        
+        .util-value {
+            width: 50px;
+            text-align: right;
+            font-family: "Chakra Petch", sans-serif;
+            font-weight: 600;
+        }
+        .util-value.low { color: #D1D5DB; }
+        .util-value.high { color: var(--collect-pink); }
+        
+        /* Tracer Logo */
+        .tracer-logo {
+            font-size: 1.6rem;
+            font-weight: 400;
+            font-family: "Britti Sans Trial", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        }
+        .tracer-text {
+            background: linear-gradient(135deg, #FCFCFC, #C4C4C4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tune-text {
+            background: linear-gradient(135deg, #38BDA4, #76E9D3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .collect-text {
+            background: linear-gradient(135deg, #FB68E1, #953E96);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Fix - Green */
+        .step-card.fix { border-radius: 0.125rem; }
+        .step-card.fix .step-badge { color: #FFFFFF; }
+        .step-card.fix .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
+        
+        .config-label {
+            font-size: 0.9rem;
+            color: #9CA3AF;
+            margin-bottom: 8px;
+            font-family: "Chakra Petch", sans-serif;
+        }
+        
+        .scope-label {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            margin-top: 10px;
+            font-family: "Chakra Petch", sans-serif;
+            font-style: italic;
+        }
+        
+        .savings {
+            display: inline-block;
+            background: linear-gradient(135deg, #38BDA4, #76E9D3);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            margin-top: 14px;
+            color: #000000;
+            font-family: "Chakra Petch", sans-serif;
+        }
+        
+        @media (max-width: 600px) {
+            .step-card { padding: 20px; }
+            .step-title { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="flow" id="flow">
+            
+            <!-- 1. Intent - Flyte Workflow -->
+            <div class="step s1">
+                <div class="step-card intent">
+                    <div class="step-badge">1. Intent</div>
+                    <div class="step-header">
+                        <div class="step-titles">
+                            <div class="step-title">Flyte</div>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        Workflow: rnaseq_workflow<br>
+                        Task: star_align<br>
+                        Execution: rnaseq_workflow-2025-12-30-4521<br>
+                        Project / Domain: bio-prod<br>
+                        <br>
+                        Declared resources:<br>
+                        CPUs: 64<br>
+                        Memory: 488 GB
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connector c1">
+                <div class="connector-line"><div class="connector-pulse"></div></div>
+            </div>
+            
+            <!-- 2. Execution - Flyte Task Execution / Kubernetes -->
+            <div class="step s2">
+                <div class="step-card execution">
+                    <div class="step-badge">2. Execution (Flyte Task Execution / Kubernetes)</div>
+                    <div class="step-header">
+                        <div class="step-titles">
+                            <div class="step-title">Execution Reality</div>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        Flyte task execution: star_align<br>
+                        Plugin: K8sTask<br>
+                        Pod: star-align-4521<br>
+                        Node / instance: r5.16xlarge<br>
+                        Container image: quay.io/biocontainers/star<br>
+                        Duration: 47 min
+                    </div>
+                    <div class="execution-note">Flyte scheduled the task using statically declared resource requests. Runtime behavior inside the container was not observable from Flyte task logs or execution metadata.</div>
+                </div>
+            </div>
+            
+            <div class="connector c2">
+                <div class="connector-line"><div class="connector-pulse"></div></div>
+            </div>
+            
+            <!-- 3. Reality - Tracer/collect -->
+            <div class="step s3">
+                <div class="step-card reality">
+                    <div class="step-badge">3. Reality</div>
+                    <div class="step-header">
+                        <div class="step-titles">
+                            <span class="tracer-logo"><span class="tracer-text">Tracer/</span><span class="collect-text">collect</span></span>
+                        </div>
+                    </div>
+                    <div class="container-label">Observed inside Flyte task execution star_align</div>
+                    <div class="pipeline-tag">
+                        Flyte workflow rnaseq_workflow → execution → task star_align
+                    </div>
+                    <div class="util-row">
+                        <span class="util-label">CPU</span>
+                        <div class="util-bar"><div class="util-fill low" style="width: 8%"></div></div>
+                        <span class="util-value low">8%</span>
+                    </div>
+                    <div class="util-row">
+                        <span class="util-label">Memory</span>
+                        <div class="util-bar"><div class="util-fill low" style="width: 18%"></div></div>
+                        <span class="util-value low">18%</span>
+                    </div>
+                    <div class="util-row">
+                        <span class="util-label">Disk I/O</span>
+                        <div class="util-bar"><div class="util-fill high" style="width: 100%"></div></div>
+                        <span class="util-value high">114%</span>
+                    </div>
+                    <div class="execution-note">Diagnosis: Task execution is I/O-bound. Increasing CPU or memory in the Flyte task resource spec will not improve runtime.</div>
+                </div>
+            </div>
+            
+            <div class="connector c3">
+                <div class="connector-line"><div class="connector-pulse"></div></div>
+            </div>
+            
+            <!-- 4. The Fix - Tracer/tune -->
+            <div class="step s4">
+                <div class="step-card fix">
+                    <div class="step-badge">4. The Fix</div>
+                    <div class="step-header">
+                        <div class="step-titles">
+                            <span class="tracer-logo"><span class="tracer-text">Tracer/</span><span class="tune-text">tune</span></span>
+                        </div>
+                    </div>
+                    <div class="config-label">Recommended Flyte task resource update for star_align:</div>
+                    <div class="step-content">
+                        Task resources:<br>
+                        CPUs: 8<br>
+                        Memory: 64 GB<br>
+                        Storage: Local NVMe / high-throughput volume<br>
+                        Node / instance: r6id.2xlarge<br>
+                        Plugin: K8sTask (io-optimized node selector)
+                    </div>
+                    <div class="scope-label">Scope: Task-level resource spec (workflow semantics unchanged)</div>
+                    <div class="savings">This updates the Flyte task's resource specification. Same workflow, same task — ~85% lower compute cost and 3.7× faster runtime.</div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        const flow = document.getElementById('flow');
+        let hasPlayed = false;
+        
+        function playAnimation() {
+            if (hasPlayed) return;
+            hasPlayed = true;
+            
+            flow.classList.remove('animate');
+            void flow.offsetWidth;
+            flow.classList.add('animate');
+        }
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    playAnimation();
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        observer.observe(flow);
+        
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                playAnimation();
+            }, 300);
+        });
+    </script>
+</body>
+</html>
