@@ -22,7 +22,6 @@
             --gray-light: #9CA3AF;
             --white: #FFFFFF;
             --black: #0A0A0A;
-            --nextflow-green: #24B064;
         }
         
         body {
@@ -104,14 +103,13 @@
         
         /* Border pulse animation system - Seamless flow */ .step-card, .gap-card { position: relative; overflow: visible; } .border-pulse { position: absolute; pointer-events: none; } .border-pulse.top { top: -1px; left: 50%; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-top 10s linear infinite; } .border-pulse.left { top: 0; left: -1px; width: 2px; height: 0; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-left 10s linear infinite; } .border-pulse.right { top: 0; right: -1px; width: 2px; height: 0; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-right 10s linear infinite; } .border-pulse.bottom-left { bottom: -1px; left: -1px; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-bottom-left 10s linear infinite; } .border-pulse.bottom-right { bottom: -1px; right: -1px; width: 0; height: 2px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-bottom-right 10s linear infinite; } @keyframes pulse-top { 0% { width: 0; left: 50%; opacity: 1; } 4% { width: 100%; left: 0; opacity: 1; } 5% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-left { 0%, 4% { height: 0; top: 0; opacity: 0; } 5% { height: 0; opacity: 1; } 14% { height: 100%; opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-right { 0%, 4% { height: 0; top: 0; opacity: 0; } 5% { height: 0; opacity: 1; } 14% { height: 100%; opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-bottom-left { 0%, 14% { width: 0; opacity: 0; } 15% { width: 0; opacity: 1; } 20% { width: 51%; opacity: 1; } 21% { opacity: 0; } 100% { opacity: 0; } } @keyframes pulse-bottom-right { 0%, 14% { width: 0; opacity: 0; } 15% { width: 0; opacity: 1; } 20% { width: 51%; opacity: 1; } 21% { opacity: 0; } 100% { opacity: 0; } } .step.s1 .border-pulse { animation-delay: 0s; } .step.s2 .border-pulse { animation-delay: 2.6s; } .step.s3 .border-pulse { animation-delay: 5.2s; } .step.s4 .border-pulse { animation: none; } .step-card.fix { animation: border-flash 10s ease-in-out infinite; animation-delay: 7.8s; } .connector-line { width: 2px; height: 100%; background: rgba(107, 114, 128, 0.4); position: relative; overflow: hidden; } .connector-pulse { position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); animation: pulse-connector 10s linear infinite; } @keyframes pulse-connector { 0% { top: -20px; opacity: 1; } 6% { top: 100%; opacity: 1; } 7% { opacity: 0; } 100% { opacity: 0; } } .connector.c1 .connector-pulse { animation-delay: 2s; } .connector.c2 .connector-pulse { animation-delay: 4.6s; } .connector.c3 .connector-pulse { animation-delay: 7.2s; } @keyframes border-flash { 0% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 2% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); } 10% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 12% { border-color: #38BDA4; box-shadow: 0 0 15px rgba(56, 189, 164, 0.6); } 20% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } 100% { border-color: rgba(107, 114, 128, 0.35); box-shadow: none; } }
         
-        /* Intent - Purple with Nextflow green accents */
+        /* Intent - Purple */
         .step-card.intent { border: 1px solid rgba(107, 114, 128, 0.35); }
         .step-card.intent .step-badge { color: #FFFFFF; }
         .step-card.intent .step-icon { background: var(--purple); color: var(--white); }
         .step-card.intent .step-tag { color: var(--purple); }
         .step-card.intent .step-title { color: var(--purple-light); }
         .step-card.intent .step-content { font-family: "Chakra Petch", sans-serif; color: #D1D5DB; }
-        .step-card.intent .nf-highlight { color: var(--nextflow-green); }
         .arrow.purple svg { stroke: var(--purple); }
         
         /* Gap - Red */
@@ -162,6 +160,13 @@
             color: #9CA3AF; 
             margin-bottom: 8px;
             font-style: italic;
+        }
+        .step-card.execution .execution-note {
+            margin-top: 14px;
+            font-family: "Chakra Petch", sans-serif;
+            font-size: 0.95rem;
+            color: #9CA3AF;
+            line-height: 1.5;
         }
         .arrow.gray svg { stroke: var(--gray); }
         
@@ -232,14 +237,15 @@
         
         .diagnosis {
             margin-top: 14px;
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 3px solid var(--red);
+            background: rgba(56, 189, 164, 0.2);
+            border-left: 3px solid #38BDA4;
             padding: 10px 14px;
             border-radius: 6px;
+            font-family: "Chakra Petch", sans-serif;
             font-size: 1.05rem;
-            color: var(--red-light);
+            font-weight: 400;
+            color: #FFFFFF;
         }
-        .diagnosis { border-color: #38BDA4; background: rgba(56, 189, 164, 0.2); color: #FFFFFF; } .diagnosis strong { color: #FFFFFF; } .gap-diagnosis { border-color: #EF4444; background: rgba(239, 68, 68, 0.3); color: #FFFFFF; } .gap-diagnosis strong { color: #FFFFFF; }
         
         .subprocess-note {
             margin-top: 10px;
@@ -307,22 +313,6 @@
             font-style: italic;
         }
         
-        .boundary-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.8rem;
-            color: #6B7280;
-            padding: 4px 0;
-        }
-        
-        .boundary-line {
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #6B7280, transparent);
-        }
-        
         @media (max-width: 600px) {
             .step-card { padding: 20px; }
             .step-title { font-size: 1.25rem; }
@@ -346,24 +336,17 @@
                         </div>
                     </div>
                     <div class="step-content">
-                        Pipeline: <span class="nf-highlight">nf-core/rnaseq</span><br>
-                        Process: <span class="nf-highlight">STAR_ALIGN</span><br>
-                        Profile: <span class="nf-highlight">awsbatch</span><br>
-                        <span style="color: #9CA3AF;">cpus</span> = 64<br>
-                        <span style="color: #9CA3AF;">memory</span> = 488.GB
+                        Pipeline: nf-core/rnaseq<br>
+                        Process: STAR_ALIGN<br>
+                        Profile: awsbatch<br>
+                        cpus = 64<br>
+                        memory = 488.GB
                     </div>
                 </div>
             </div>
             
             <div class="connector c1">
                 <div class="connector-line"><div class="connector-pulse"></div></div>
-            </div>
-            
-            <!-- Boundary label -->
-            <div class="boundary-label">
-                <span class="boundary-line"></span>
-                <span>Nextflow submits here → Tracer observes below</span>
-                <span class="boundary-line"></span>
             </div>
             
             <!-- 2. Execution - AWS Batch / Kernel -->
@@ -384,7 +367,7 @@
                         Task: STAR_ALIGN (job 4521)<br>
                         Duration: 47 min
                     </div>
-                    <div class="diagnosis gap-diagnosis"><strong>The gap:</strong> Nextflow requested resources statically. Runtime behavior was not observable from logs or directives.<br>→ 92% CPU idle, 82% RAM idle</div>
+                    <div class="execution-note">Nextflow requested resources statically. Runtime behavior was not observable from logs or directives. → 92% CPU idle, 82% RAM idle</div>
                 </div>
             </div>
             
@@ -425,7 +408,7 @@
                     <div class="util-note">STAR waiting on BAM writes (fsync)</div>
                     <div class="subprocess-note">Includes STAR, samtools, and helper subprocesses</div>
                     <div class="diagnosis">
-                        <strong>Diagnosis:</strong> I/O bound. Adding CPU/RAM won't help.
+                        Diagnosis: I/O bound. Adding CPU/RAM won't help.
                     </div>
                 </div>
             </div>
@@ -447,9 +430,9 @@
                     </div>
                     <div class="config-label">Suggested for process STAR_ALIGN:</div>
                     <div class="step-content">
-                        <span style="color: #9CA3AF;">cpus</span> = 8<br>
-                        <span style="color: #9CA3AF;">memory</span> = 64.GB<br>
-                        <span style="color: #9CA3AF;">disk</span> = local NVMe<br>
+                        cpus = 8<br>
+                        memory = 64.GB<br>
+                        disk = local NVMe<br>
                         Instance: r6id.2xlarge
                     </div>
                     <div class="config-hint">Drop-in replacement for current profile</div>
