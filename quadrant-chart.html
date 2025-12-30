@@ -477,53 +477,21 @@
     
     <script>
         const flow = document.getElementById('flow');
-        let animationTimeout = null;
-        let isInView = false;
+        let hasPlayed = false;
         
-        const ANIMATION_DURATION = 8000;
-        const PAUSE_DURATION = 5000;
-        const FADE_OUT_DURATION = 800;
-        const RESTART_DELAY = 300;
-        
-        function startAnimationLoop() {
-            if (!isInView) return;
+        function playAnimation() {
+            if (hasPlayed) return;
+            hasPlayed = true;
             
-            flow.classList.remove('fade-out');
             flow.classList.remove('animate');
             void flow.offsetWidth;
             flow.classList.add('animate');
-            
-            animationTimeout = setTimeout(() => {
-                if (!isInView) return;
-                
-                flow.classList.remove('animate');
-                flow.classList.add('fade-out');
-                
-                setTimeout(() => {
-                    if (isInView) {
-                        startAnimationLoop();
-                    }
-                }, FADE_OUT_DURATION + RESTART_DELAY);
-                
-            }, ANIMATION_DURATION + PAUSE_DURATION);
-        }
-        
-        function stopAnimationLoop() {
-            if (animationTimeout) {
-                clearTimeout(animationTimeout);
-                animationTimeout = null;
-            }
         }
         
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    isInView = true;
-                    stopAnimationLoop();
-                    startAnimationLoop();
-                } else {
-                    isInView = false;
-                    stopAnimationLoop();
+                    playAnimation();
                 }
             });
         }, {
@@ -534,8 +502,7 @@
         
         window.addEventListener('load', () => {
             setTimeout(() => {
-                isInView = true;
-                startAnimationLoop();
+                playAnimation();
             }, 300);
         });
     </script>
